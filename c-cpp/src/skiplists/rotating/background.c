@@ -61,6 +61,10 @@ static pthread_t bg_thread;    /* background thread */
 
 /* Uncomment to collect background stats - reduces performance */
 #define BG_STATS
+/* Delete first level when its size relative to N is to large */
+#define LEVEL_RATE_DELETE
+/* Make sure we don't raise to levels larger than LOG(N) + 1 */
+#define DYNAMIC_MAX_LEVEL
 
 static struct sl_background_stats {
         unsigned long raises;
@@ -76,9 +80,12 @@ VOLATILE static int bg_finished;
 VOLATILE static int bg_running;
 
 /* for deciding whether to lower the skip list index level */
-static int bg_non_deleted;
-static int bg_deleted;
-static int bg_tall_deleted;
+static unsigned int bg_non_deleted;
+#ifdef LEVEL_RATE_DELETE
+static unsigned int bg_first_level;
+#endif
+static unsigned int bg_deleted;
+static unsigned int bg_tall_deleted;
 
 static int bg_sleep_time;
 static int bg_counter;
@@ -110,6 +117,7 @@ static void* bg_loop(void *args)
 {
         node_t  *head  = set->head;
         int raised = 0; /* keep track of if we raised index level */
+		int max_levels = MAX_LEVELS;
         int threshold;  /* for testing if we should lower index level */
         unsigned long i;
         ptst_t *ptst = NULL;
@@ -143,6 +151,9 @@ static void* bg_loop(void *args)
                 #endif
 
                 bg_non_deleted = 0;
+				#ifdef LEVEL_RATE_DELETE
+				bg_first_level = 0;
+				#endif
                 bg_deleted = 0;
                 bg_tall_deleted = 0;
 
@@ -164,11 +175,15 @@ static void* bg_loop(void *args)
 
                 // raise the index level nodes
                 for (i = 0; (i+1) < set->head->level; i++) {
-                        assert(i < MAX_LEVELS);
+						#ifdef DYNAMIC_MAX_LEVEL
+						// make sure we dont raise th index level when it's not needed
+						max_levels = floor_log_2(bg_non_deleted) + 1;
+						#endif
+                        assert(i < max_levels);
                         raised = bg_raise_ilevel(i + 1, ptst);
 
                         if ((((i+1) == (head->level-1)) && raised)
-                                        && head->level < MAX_LEVELS) {
+                                        && head->level < max_levels) {
                                 // add a new index level
 
                                 // nullify BEFORE we increase the level
@@ -183,8 +198,12 @@ static void* bg_loop(void *args)
                 }
 
                 // if needed, remove the lowest index level
-                threshold = bg_non_deleted * 10;
-                if (bg_tall_deleted > threshold) {
+				#ifdef LEVEL_RATE_DELETE
+                threshold = bg_non_deleted * 2 < bg_first_level * 3;
+				#else
+				threshold = bg_non_deleted * 10 < bg_tall_deleted;
+				#endif
+                if (threshold) {
                         if (head->level > 1) {
                                 bg_lower_ilevel(ptst);
 
@@ -268,6 +287,11 @@ static int bg_trav_nodes(ptst_t *ptst)
 
                 if (NULL != node->val && node != node->val) {
                         ++bg_non_deleted;
+						#ifdef LEVEL_RATE_DELETE
+						if (node->level > 0){
+							++bg_first_level;
+						}
+						#endif
                 }
                 prev = node;
                 node = next;
@@ -553,3 +577,14 @@ void bg_remove(node_t *prev, node_t *node, ptst_t *ptst)
                         bg_help_remove(prev, node, ptst);
         }
 }
+
+int floor_log_2(unsigned int n) {
+  int pos = 0;
+  if (n >= 1<<16) { n >>= 16; pos += 16; }
+  if (n >= 1<< 8) { n >>=  8; pos +=  8; }
+  if (n >= 1<< 4) { n >>=  4; pos +=  4; }
+  if (n >= 1<< 2) { n >>=  2; pos +=  2; }
+  if (n >= 1<< 1) {           pos +=  1; }
+  return ((n == 0) ? (-1) : pos);
+}
+

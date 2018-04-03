@@ -15,5 +15,6 @@ void bg_stop(void);
 void bg_print_stats(void);
 void bg_remove(node_t *prev, node_t *node, ptst_t *ptst);
 void bg_help_remove(node_t *prev, node_t *node, ptst_t *ptst);
+int floor_log_2(unsigned int n);
 
 #endif /* BACKGROUND_H_ */
