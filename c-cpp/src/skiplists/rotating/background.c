@@ -70,7 +70,7 @@ static pthread_t bg_thread;    /* background thread */
 /* Use number of threads to determine if other threads should also help remove */
 //#define OTHER_THREADS_HELP
 /* Use number of threads to determine how long background thread sleeps */
-//#define SLEEP_BY_NUM_OF_THREADS
+#define SLEEP_BY_NUM_OF_THREADS
 
 static struct sl_background_stats {
         unsigned long raises;
@@ -134,8 +134,13 @@ static void* bg_loop(void *args)
         unsigned long i;
         ptst_t *ptst = NULL;
         unsigned long zero;
+	#ifdef SLEEP_BY_NUM_OF_THREADS
 	int nLogThreads = floor_log_2(nThreads);
-        offset_sleep_time = nLogThreads > 0? 144000/nLogThreads : 0;
+	if (nLogThreads > 0)
+	        offset_sleep_time = 144000/nLogThreads;
+	else
+		offset_sleep_time = 0;
+	#endif
         assert(NULL != set);
         bg_counter = 0;
         bg_go = 0;
