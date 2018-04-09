@@ -13,9 +13,10 @@ def create_plot(list_to_compare_file='compare.txt'):
     compare_list = []
     with open(list_to_compare_file, 'r') as f:
         for line in f.readlines():
-            if 'skiplist' in line:
-                assert line.strip() in lists_names, "Could not find {0} results in th results pickle file".format(line)
+            if line.strip() in lists_names:
                 compare_list.append(line.strip())
+
+    assert len(compare_list), "No skip-list name was found at {0}".format(list_to_compare_file)
 
     compare_lists(results_dict, compare_list)
 
