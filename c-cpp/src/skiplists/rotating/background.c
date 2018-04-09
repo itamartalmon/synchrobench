@@ -70,7 +70,7 @@ static pthread_t bg_thread;    /* background thread */
 /* Use number of threads to determine if other threads should also help remove */
 //#define OTHER_THREADS_HELP
 /* Use number of threads to determine how long background thread sleeps */
-#define SLEEP_BY_NUM_OF_THREADS
+//#define SLEEP_BY_NUM_OF_THREADS
 
 static struct sl_background_stats {
         unsigned long raises;
