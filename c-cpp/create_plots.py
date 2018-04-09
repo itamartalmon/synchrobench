@@ -3,25 +3,17 @@ from matplotlib import pyplot as plt
 from run_evaluation import RESULTS_PATH, NUM_OF_THREADS, INIT_SIZE, UPDATE_RATIO
 
 
-def create_plot(list_to_compare_file='compare.txt'):
+def create_plot():
 
     with open(RESULTS_PATH, 'rb') as f:
         results_dict = pickle.load(f)
 
-    lists_names = list(results_dict.keys())
-
-    compare_list = []
-    with open(list_to_compare_file, 'r') as f:
-        for line in f.readlines():
-            if line.strip() in lists_names:
-                compare_list.append(line.strip())
-
-    assert len(compare_list), "No skip-list name was found at {0}".format(list_to_compare_file)
-
-    compare_lists(results_dict, compare_list)
+    key_words = ['sleep', 'max-level', 'help-remove', 'level-delete-original', 'level-delete-by-ratio']
+    for k in key_words:
+        compare_lists(results_dict, [l for l in results_dict.keys() if k in l], k)
 
 
-def compare_lists(results_dict, lists):
+def compare_lists(results_dict, lists, output_name):
 
     print("\nCreating comparison diagram between the following lists:\n{0}\n".format(lists))
     fig, axes = plt.subplots(nrows=len(INIT_SIZE), ncols=len(UPDATE_RATIO), figsize=(len(INIT_SIZE)*3, len(UPDATE_RATIO)*3))
@@ -41,17 +33,9 @@ def compare_lists(results_dict, lists):
     fig.text(0.5, 0.02, 'Number of threads', ha='center')
     fig.text(0.02, 0.5, 'TXS/s', va='center', rotation='vertical')
     fig.legend(lines, lists, loc='upper center')
-    plt.savefig('plot_{0}.png'.format('-'.join(lists)))
+    plt.savefig('{0}_plot.png'.format(output_name))
     plt.close()
 
 
 if __name__ == '__main__':
-    '''
-    This script recives a path to a text file that contains the names of lists we want to compare. (default='./compare.txt')
-    It will read the relevant information from the results pickle file created by run_evaluation.py and plot the comparison
-    over all the relevant configurations
-    '''
-    if len(sys.argv) > 1:
-        create_plot(sys.argv[1])
-    else:
-        create_plot()
+    create_plot()
