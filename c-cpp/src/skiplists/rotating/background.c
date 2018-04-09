@@ -134,7 +134,8 @@ static void* bg_loop(void *args)
         unsigned long i;
         ptst_t *ptst = NULL;
         unsigned long zero;
-
+	int nLogThreads = floor_log_2(nThreads);
+        offset_sleep_time = nLogThreads > 0? 144000/nLogThreads : 0;
         assert(NULL != set);
         bg_counter = 0;
         bg_go = 0;
@@ -478,7 +479,6 @@ void bg_init(set_t *s)
  */
 void bg_start(int sleep_time, int numOfThreads)
 {
-        offset_sleep_time = 144000/floor_log_2(nThreads);
         /* XXX not thread safe  XXX */
         if (!bg_running) {
                 bg_sleep_time = sleep_time;
