@@ -105,8 +105,6 @@ void barrier_cross(barrier_t *b)
 	pthread_mutex_unlock(&b->mutex);
 }
 
-
-
 /* 
  * Returns a pseudo-random value in [1;range).
  * Depending on the symbolic constant RAND_MAX>=32767 defined in stdlib.h,
@@ -559,12 +557,12 @@ int main(int argc, char **argv)
 
         // wait till the list is balanced
         set->head->level = 1;
-        bg_start(0);
+        bg_start(0, nb_threads);
         while (set->head->level < floor_log_2(initial)) {
             AO_nop_full();
         }
         bg_stop();
-        bg_start(50000);
+        bg_start(50000, nb_threads);
         printf("Number of levels is %lu\n", set->head->level);
 
 

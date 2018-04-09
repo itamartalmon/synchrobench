@@ -60,11 +60,17 @@ static set_t *set;      /* the set to maintain */
 static pthread_t bg_thread;    /* background thread */
 
 /* Uncomment to collect background stats - reduces performance */
-#define BG_STATS
+//#define BG_STATS
 /* Delete first level when its size relative to N is to large */
-#define LEVEL_RATE_DELETE
+//#define LEVEL_RATE_DELETE
+/* Another constant instead of 10 for threshold (when to delete first level) */
+//#define CONST_THRESHOLD_LEVEL_DELETE
 /* Make sure we don't raise to levels larger than LOG(N) + 1 */
-#define DYNAMIC_MAX_LEVEL
+//#define DYNAMIC_MAX_LEVEL
+/* Use number of threads to determine if other threads should also help remove */
+//#define OTHER_THREADS_HELP
+/* Use number of threads to determine how long background thread sleeps */
+//#define SLEEP_BY_NUM_OF_THREADS
 
 static struct sl_background_stats {
         unsigned long raises;
@@ -80,13 +86,19 @@ VOLATILE static int bg_finished;
 VOLATILE static int bg_running;
 
 /* for deciding whether to lower the skip list index level */
-static unsigned int bg_non_deleted;
+static int bg_non_deleted;
 #ifdef LEVEL_RATE_DELETE
 static unsigned int bg_first_level;
 #endif
-static unsigned int bg_deleted;
-static unsigned int bg_tall_deleted;
-
+#ifdef CONST_THRESHOLD_LEVEL_DELETE
+static unsigned int threshold_level_delete = 5;
+#endif
+#ifdef SLEEP_BY_NUM_OF_THREADS
+static unsigned int offset_sleep_time;
+#endif
+static int bg_deleted;
+static int bg_tall_deleted;
+static int nThreads;
 static int bg_sleep_time;
 static int bg_counter;
 static int bg_go;
@@ -117,7 +129,7 @@ static void* bg_loop(void *args)
 {
         node_t  *head  = set->head;
         int raised = 0; /* keep track of if we raised index level */
-		int max_levels = MAX_LEVELS;
+        int max_levels = MAX_LEVELS;
         int threshold;  /* for testing if we should lower index level */
         unsigned long i;
         ptst_t *ptst = NULL;
@@ -138,9 +150,11 @@ static void* bg_loop(void *args)
         #endif
 
         while (1) {
-
+                #ifdef SLEEP_BY_NUM_OF_THREADS
+                usleep(offset_sleep_time);
+                #else
                 usleep(bg_sleep_time);
-
+                #endif
                 if (bg_finished)
                         break;
 
@@ -151,9 +165,9 @@ static void* bg_loop(void *args)
                 #endif
 
                 bg_non_deleted = 0;
-				#ifdef LEVEL_RATE_DELETE
-				bg_first_level = 0;
-				#endif
+                #ifdef LEVEL_RATE_DELETE
+                bg_first_level = 0;
+                #endif
                 bg_deleted = 0;
                 bg_tall_deleted = 0;
 
@@ -175,15 +189,15 @@ static void* bg_loop(void *args)
 
                 // raise the index level nodes
                 for (i = 0; (i+1) < set->head->level; i++) {
-						#ifdef DYNAMIC_MAX_LEVEL
-						// make sure we dont raise th index level when it's not needed
-						max_levels = floor_log_2(bg_non_deleted) + 1;
-						#endif
+                        #ifdef DYNAMIC_MAX_LEVEL
+                        // make sure we dont raise th index level when it's not needed
+                        max_levels = floor_log_2(bg_non_deleted) + 1;
+                        #endif
                         assert(i < max_levels);
                         raised = bg_raise_ilevel(i + 1, ptst);
 
                         if ((((i+1) == (head->level-1)) && raised)
-                                        && head->level < max_levels) {
+                            && head->level < max_levels) {
                                 // add a new index level
 
                                 // nullify BEFORE we increase the level
@@ -198,21 +212,32 @@ static void* bg_loop(void *args)
                 }
 
                 // if needed, remove the lowest index level
-				#ifdef LEVEL_RATE_DELETE
-                threshold = bg_non_deleted * 2 < bg_first_level * 3;
-				#else
-				threshold = bg_non_deleted * 10 < bg_tall_deleted;
-				#endif
+                #ifdef LEVEL_RATE_DELETE
+                threshold = bg_non_deleted * 3 < bg_first_level * 4;
+                #else
+                #ifdef CONST_THRESHOLD_LEVEL_DELETE
+                threshold = bg_non_deleted * threshold_level_delete < bg_tall_deleted;
+                #else
+                threshold = bg_non_deleted * 10 < bg_tall_deleted;
+                #endif
+                #endif
                 if (threshold) {
                         if (head->level > 1) {
                                 bg_lower_ilevel(ptst);
-
                                 #ifdef BG_STATS
                                 ++(bg_stats.lowers);
                                 #endif
                         }
                 }
-
+                #ifdef OTHER_THREADS_HELP
+                if (bg_deleted * floor_log_2(nThreads) > bg_non_deleted * 3) {
+                        bg_should_delete = 1;
+                        bg_stats.should_delete += 1;
+                }
+                else {
+                        bg_should_delete = 0;
+                }
+                #else
                 if (bg_deleted > bg_non_deleted * 3) {
                         bg_should_delete = 1;
                         bg_stats.should_delete += 1;
@@ -220,6 +245,7 @@ static void* bg_loop(void *args)
                 else {
                         bg_should_delete = 0;
                 }
+                #endif
                 BARRIER();
         }
 
@@ -287,8 +313,8 @@ static int bg_trav_nodes(ptst_t *ptst)
 
                 if (NULL != node->val && node != node->val) {
                         ++bg_non_deleted;
-						#ifdef LEVEL_RATE_DELETE
-						if (node->level > 0){
+                        #ifdef LEVEL_RATE_DELETE
+                        if (node->level > 0){
 							++bg_first_level;
 						}
 						#endif
@@ -450,11 +476,13 @@ void bg_init(set_t *s)
  * Note: Only start the background thread if it is not currently
  * running.
  */
-void bg_start(int sleep_time)
+void bg_start(int sleep_time, int numOfThreads)
 {
+        offset_sleep_time = 144000/floor_log_2(nThreads);
         /* XXX not thread safe  XXX */
         if (!bg_running) {
                 bg_sleep_time = sleep_time;
+                nThreads = numOfThreads;
                 bg_running = 1;
                 bg_finished = 0;
                 pthread_create(&bg_thread, NULL, bg_loop, NULL);
@@ -579,12 +607,11 @@ void bg_remove(node_t *prev, node_t *node, ptst_t *ptst)
 }
 
 int floor_log_2(unsigned int n) {
-  int pos = 0;
-  if (n >= 1<<16) { n >>= 16; pos += 16; }
-  if (n >= 1<< 8) { n >>=  8; pos +=  8; }
-  if (n >= 1<< 4) { n >>=  4; pos +=  4; }
-  if (n >= 1<< 2) { n >>=  2; pos +=  2; }
-  if (n >= 1<< 1) {           pos +=  1; }
-  return ((n == 0) ? (-1) : pos);
+        int pos = 0;
+        if (n >= 1<<16) { n >>= 16; pos += 16; }
+        if (n >= 1<< 8) { n >>=  8; pos +=  8; }
+        if (n >= 1<< 4) { n >>=  4; pos +=  4; }
+        if (n >= 1<< 2) { n >>=  2; pos +=  2; }
+        if (n >= 1<< 1) {           pos +=  1; }
+        return ((n == 0) ? (-1) : pos);
 }
-

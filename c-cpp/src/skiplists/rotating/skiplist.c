@@ -153,7 +153,7 @@ set_t* set_new(int start)
 
         bg_init(set);
         if (start)
-                bg_start(1);
+                bg_start(1, 1);
 
         ptst_critical_exit(ptst);
 
