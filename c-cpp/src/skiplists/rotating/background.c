@@ -137,7 +137,7 @@ static void* bg_loop(void *args)
 	#ifdef SLEEP_BY_NUM_OF_THREADS
 	int nLogThreads = floor_log_2(nThreads);
 	if (nLogThreads > 0)
-	        offset_sleep_time = 144000/nLogThreads;
+	        offset_sleep_time = 240000/nLogThreads;
 	else
 		offset_sleep_time = 0;
 	#endif
@@ -236,7 +236,7 @@ static void* bg_loop(void *args)
                         }
                 }
                 #ifdef OTHER_THREADS_HELP
-                if (bg_deleted * floor_log_2(nThreads) > bg_non_deleted * 3) {
+                if (bg_deleted * floor_log_2(nThreads) > bg_non_deleted * 11) {
                         bg_should_delete = 1;
                         bg_stats.should_delete += 1;
                 }

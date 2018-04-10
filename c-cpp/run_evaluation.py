@@ -7,7 +7,7 @@ RESULTS_PATH = os.sep.join(['results.pkl'])
 NUM_OF_THREADS = [2, 4, 8, 16, 32, 64]
 INIT_SIZE = [256, 1024]
 UPDATE_RATIO = [20, 50]
-DURATION = 5000
+DURATION = 10000
 
 TXS_REGEX = "#txs\s+:\s+(\d+)"
 NODES_REGEX = "inodes at level (\d+)\s+=\s+(\d+)"
