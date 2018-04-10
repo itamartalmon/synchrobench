@@ -1,0 +1,21 @@
+\begin{thebibliography}{1}
+
+\bibitem{C3}
+William Pugh,
+\newblock ``Skip lists: A probabilistic alternative to balanced trees,''
+\newblock in {\em Workshop on Algorithms and Data Structures}, 1989, vol.
+  August, pp. 437--449.
+
+\bibitem{C1}
+Alan~Fekete Dick, Ian and Vincent Gramoli,
+\newblock ``A skip list for multicore,''
+\newblock in {\em Concurrency and Computation: Practice and Experience}, 2017,
+  vol.~29, p.~4.
+
+\bibitem{C2}
+Gramoli~Vincent Crain, Tyler and Michel Raynal,
+\newblock ``No hot spot non-blocking skip list,''
+\newblock in {\em Distributed Computing Systems (ICDCS)}, 2013, vol.~33, pp.
+  196--205.
+
+\end{thebibliography}

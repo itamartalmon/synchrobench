@@ -1,0 +1,8 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: Template.aux
+The style file: IEEEbib.bst
+Database file #1: refs.bib
+Name 1 in "Dick, Ian, Alan Fekete, and Vincent Gramoli" has a comma at the end for entry C1
+while executing---line 1012 of file IEEEbib.bst
+Too many commas in name 1 of "Crain, Tyler, Gramoli, Vincent and Raynal, Michel" for entry C2
+while executing---line 1012 of file IEEEbib.bst
+(There were 2 error messages)
