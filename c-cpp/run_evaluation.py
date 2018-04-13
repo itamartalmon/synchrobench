@@ -68,10 +68,11 @@ def main():
 
                     results_dict[l][i][u][t] = {'txs': total_txs, 'nodes': nodes}
 
+        print("\nSaving {0} results to {1} (as a pickle file)".format(l, RESULTS_PATH))
+        with open(RESULTS_PATH, 'wb') as _f:
+            pickle.dump(results_dict, _f)
+
     print("\nTesting done after {0} minutes.".format(ceil((time.time() - start_t) / 60)))
-    print("\nSaving results to {0} (as a pickle file)".format(RESULTS_PATH))
-    with open(RESULTS_PATH, 'wb') as _f:
-        pickle.dump(results_dict, _f)
 
     print("\nRotating Skip List Evaluation Script Finished Successfully\n")
 
