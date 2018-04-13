@@ -24,6 +24,7 @@ def main():
     print("\nRotating Skip List Evaluation Script Started\n")
     print('\n'.join([
         "Binary Path: " + SKIP_LISTS_PATH + os.sep,
+        "Skip Lists: " + str(skip_lists_bins),
         "Num of Threads: " + str(NUM_OF_THREADS),
         "Initial Set Size: " + str(INIT_SIZE),
         "Update Ratio: " + str(UPDATE_RATIO),
