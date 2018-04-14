@@ -71,6 +71,8 @@ static pthread_t bg_thread;    /* background thread */
 //#define OTHER_THREADS_HELP
 /* Use number of threads to determine how long background thread sleeps */
 //#define SLEEP_BY_NUM_OF_THREADS
+/* Don't sleep and then sleep for 100ms instead of always sleeping for 50ms */
+//#define SLEEP_ZERO
 
 static struct sl_background_stats {
         unsigned long raises;
@@ -134,6 +136,7 @@ static void* bg_loop(void *args)
         unsigned long i;
         ptst_t *ptst = NULL;
         unsigned long zero;
+	int flag = 0;	
 	#ifdef SLEEP_BY_NUM_OF_THREADS
 	int nLogThreads = floor_log_2(nThreads);
 	if (nLogThreads > 0)
@@ -146,7 +149,6 @@ static void* bg_loop(void *args)
         bg_go = 0;
         bg_should_delete = 1;
         BARRIER();
-
         #ifdef BG_STATS
         bg_stats.raises = 0;
         bg_stats.loops = 0;
@@ -157,13 +159,24 @@ static void* bg_loop(void *args)
 
         while (1) {
                 #ifdef SLEEP_BY_NUM_OF_THREADS
-                usleep(offset_sleep_time);
+		if (flag)
+			usleep(offset_sleep_time * 2);
+		else		
+              		usleep(offset_sleep_time);
                 #else
-                usleep(bg_sleep_time);
+		#ifdef SLEEP_ZERO
+		if (flag)
+			usleep(0);
+		else
+                	usleep(bg_sleep_time * 2);
+		#else
+			usleep(bg_sleep_time);
+		#endif
                 #endif
                 if (bg_finished)
                         break;
 
+		flag = (flag-1) * -1;
                 zero = sl_zero;
 
                 #ifdef BG_STATS
