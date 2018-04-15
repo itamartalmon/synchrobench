@@ -111,8 +111,7 @@ int bg_should_delete;
 
 static void* bg_loop(void *args);
 static void bg_loop_helper(set_t *set);
-static int bg_trav_nodes(ptst_t *ptst);
-static int bg_trav_nodes_helper(set_t *set, ptst_t *ptst);
+static int bg_trav_nodes(ptst_t *ptst, set_t *set);
 static void bg_lower_ilevel(ptst_t *ptst, set_t *set);
 static int bg_raise_ilevel(int height, ptst_t *ptst, set_t *set);
 static void get_index_above(node_t *head,
@@ -203,7 +202,7 @@ void bg_loop_helper(set_t *set) {
                 bg_tall_deleted = 0;
 
                 // traverse the node level and try deletes/raises
-                raised = bg_trav_nodes(ptst);
+                raised = bg_trav_nodes(ptst, set);
 
                 if (raised && (1 == head->level)) {
                         // add a new index level
@@ -289,82 +288,71 @@ void bg_loop_helper(set_t *set) {
  * Note: this tries to raise non-deleted nodes, and finished deletions that
  * have been started but not completed.
  */
-static int bg_trav_nodes(ptst_t *ptst) {
-        int raised = 0;
-        int tmp = 0;
-        for (int i = 0; i < 32; i++) {
-                tmp = bg_trav_nodes_helper(sets[i], ptst);
-                if (raised == 0 && tmp != 0)
-                        raised = tmp;
+static int bg_trav_nodes(ptst_t *ptst, set_t *set) {
+    node_t *prev, *node, *next;
+    node_t *above_head = set->head, *above_prev, *above_next;
+    unsigned long zero = sl_zero;
+    int raised = 0;
+
+    assert(NULL != set && NULL != set->head);
+
+    ptst = ptst_critical_enter();
+
+    above_prev = above_next = above_head;
+    prev = set->head;
+    node = prev->next;
+    if (NULL == node)
+        return 0;
+    next = node->next;
+
+    while (NULL != next) {
+
+        if (NULL == node->val) {
+            bg_remove(prev, node, ptst);
+            if (node->level >= 1)
+                ++bg_tall_deleted;
+            ++bg_deleted;
         }
-        return raised;
-}
+        else if (node->val != node) {
+            if ((((0 == prev->level
+                   && 0 == node->level)
+                  && 0 == next->level))
+                && CAS(&node->raise_or_remove, 0, 1)) {
 
-int bg_trav_nodes_helper(set_t *set, ptst_t *ptst) {
-        node_t *prev, *node, *next;
-        node_t *above_head = set->head, *above_prev, *above_next;
-        unsigned long zero = sl_zero;
-        int raised = 0;
+                node->level = 1;
 
-        assert(NULL != set && NULL != set->head);
+                raised = 1;
 
-        ptst = ptst_critical_enter();
+                get_index_above(above_head, &above_prev,
+                                &above_next, 0, node->key,
+                                zero);
 
-        above_prev = above_next = above_head;
-        prev = set->head;
-        node = prev->next;
-        if (NULL == node)
-                return 0;
-        next = node->next;
+                // swap the pointers
+                node->succs[IDX(0,zero)] = above_next;
 
-        while (NULL != next) {
+                BARRIER(); // make sure above happens first
 
-                if (NULL == node->val) {
-                        bg_remove(prev, node, ptst);
-                        if (node->level >= 1)
-                                ++bg_tall_deleted;
-                        ++bg_deleted;
-                }
-                else if (node->val != node) {
-                        if ((((0 == prev->level
-                                && 0 == node->level)
-                                && 0 == next->level))
-                                && CAS(&node->raise_or_remove, 0, 1)) {
+                above_prev->succs[IDX(0,zero)] = node;
+                above_next = above_prev = above_head = node;
+            }
+        }
 
-                                node->level = 1;
-
-                                raised = 1;
-
-                                get_index_above(above_head, &above_prev,
-                                                &above_next, 0, node->key,
-                                                zero);
-
-                                // swap the pointers
-                                node->succs[IDX(0,zero)] = above_next;
-
-                                BARRIER(); // make sure above happens first
-
-                                above_prev->succs[IDX(0,zero)] = node;
-                                above_next = above_prev = above_head = node;
-                        }
-                }
-
-                if (NULL != node->val && node != node->val) {
-                        ++bg_non_deleted;
-                        #ifdef LEVEL_RATE_DELETE
-                        if (node->level > 0){
+        if (NULL != node->val && node != node->val) {
+            ++bg_non_deleted;
+#ifdef LEVEL_RATE_DELETE
+            if (node->level > 0){
 							++bg_first_level;
 						}
-						#endif
-                }
-                prev = node;
-                node = next;
-                next = next->next;
+#endif
         }
+        prev = node;
+        node = next;
+        next = next->next;
+    }
 
-        ptst_critical_exit(ptst);
+    ptst_critical_exit(ptst);
 
-        return raised;
+    return raised;
 }
 
 /**
