@@ -55,7 +55,7 @@ common with other multi-threaded skip list implementations.
 #include "garbagecoll.h"
 #include "ptst.h"
 
-static set_t *set;      /* the set to maintain */
+static set_t *sets[32];
 
 static pthread_t bg_thread;    /* background thread */
 
@@ -110,9 +110,11 @@ int bg_should_delete;
 /* - Private Functions - */
 
 static void* bg_loop(void *args);
+static void bg_loop_helper(set_t *set);
 static int bg_trav_nodes(ptst_t *ptst);
-static void bg_lower_ilevel(ptst_t *ptst);
-static int bg_raise_ilevel(int height, ptst_t *ptst);
+static void bg_trav_nodes_helper(set_t *set, ptst_t *ptst);
+static void bg_lower_ilevel(ptst_t *ptst, set_t *set);
+static int bg_raise_ilevel(int height, ptst_t *ptst, set_t *set);
 static void get_index_above(node_t *head,
                             node_t **prev,
                             node_t **node,
@@ -129,6 +131,13 @@ static void get_index_above(node_t *head,
  */
 static void* bg_loop(void *args)
 {
+        for (int i = 0; i < 32; i++) {
+            bg_loop_helper(sets[i]);
+        }
+        return NULL;
+}
+
+void bg_loop_helper(set_t *set) {
         node_t  *head  = set->head;
         int raised = 0; /* keep track of if we raised index level */
         int max_levels = MAX_LEVELS;
@@ -136,7 +145,7 @@ static void* bg_loop(void *args)
         unsigned long i;
         ptst_t *ptst = NULL;
         unsigned long zero;
-	int flag = 0;	
+	int flag = 0;
 	#ifdef SLEEP_BY_NUM_OF_THREADS
 	int nLogThreads = floor_log_2(nThreads);
 	if (nLogThreads > 0)
@@ -161,7 +170,7 @@ static void* bg_loop(void *args)
                 #ifdef SLEEP_BY_NUM_OF_THREADS
 		if (flag)
 			usleep(offset_sleep_time * 2);
-		else		
+		else
               		usleep(offset_sleep_time);
                 #else
 		#ifdef SLEEP_ZERO
@@ -213,7 +222,7 @@ static void* bg_loop(void *args)
                         max_levels = floor_log_2(bg_non_deleted) + 1;
                         #endif
                         assert(i < max_levels);
-                        raised = bg_raise_ilevel(i + 1, ptst);
+                        raised = bg_raise_ilevel(i + 1, ptst, set);
 
                         if ((((i+1) == (head->level-1)) && raised)
                             && head->level < max_levels) {
@@ -267,8 +276,6 @@ static void* bg_loop(void *args)
                 #endif
                 BARRIER();
         }
-
-        return NULL;
 }
 
 /**
@@ -280,8 +287,12 @@ static void* bg_loop(void *args)
  * Note: this tries to raise non-deleted nodes, and finished deletions that
  * have been started but not completed.
  */
-static int bg_trav_nodes(ptst_t *ptst)
-{
+static int bg_trav_nodes(ptst_t *ptst) {
+        for (int i = 0; i < 32; i++)
+        bg_trav_nodes_helper(sets[i], ptst);
+}
+
+void bg_trav_nodes_helper(set_t *set, ptst_t *ptst) {
         node_t *prev, *node, *next;
         node_t *above_head = set->head, *above_prev, *above_next;
         unsigned long zero = sl_zero;
@@ -375,7 +386,7 @@ static void get_index_above(node_t *above_head,
  *
  * Returns 1 if a node was raised and 0 otherwise.
  */
-static int bg_raise_ilevel(int h, ptst_t *ptst)
+static int bg_raise_ilevel(int h, ptst_t *ptst, set_t *set)
 {
         int raised = 0;
         unsigned long zero = sl_zero;
@@ -435,7 +446,7 @@ static int bg_raise_ilevel(int h, ptst_t *ptst)
 /**
  * bg_lower_ilevel - lower the index level
  */
-void bg_lower_ilevel(ptst_t *ptst)
+void bg_lower_ilevel(ptst_t *ptst, set_t *set)
 {
         unsigned long zero = sl_zero;
         node_t  *node = set->head;
@@ -476,9 +487,9 @@ void bg_lower_ilevel(ptst_t *ptst)
  * bg_init - initialise the background module
  * @s: the set to maintain
  */
-void bg_init(set_t *s)
+void bg_init(set_t *s, int setIndex)
 {
-        set = s;
+        sets[setIndex] = s;
         bg_finished = 0;
         bg_running = 0;
 
@@ -531,7 +542,7 @@ void bg_print_stats(void)
         #ifdef BG_STATS
         printf("Loops = %lu\n", bg_stats.loops);
         printf("Raises = %lu\n", bg_stats.raises);
-        printf("Levels = %lu\n", set->head->level);
+        //printf("Levels = %lu\n", set->head->level);
         printf("Lowers = %lu\n", bg_stats.lowers);
         printf("Delete Attempts = %lu\n", bg_stats.delete_attempts);
         printf("Delete Succeeds = %lu\n", bg_stats.delete_succeeds);

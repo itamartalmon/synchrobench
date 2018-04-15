@@ -134,7 +134,7 @@ void marker_delete(node_t *node, ptst_t *ptst)
  * Note: A background thread to update the index levels of the
  * skip list is created and kick-started as part of this routine.
  */
-set_t* set_new(int start)
+set_t* set_new(int start, int setIndex)
 {
         set_t *set;
         ptst_t *ptst;
@@ -151,7 +151,7 @@ set_t* set_new(int start)
 
         set->head = node_new(0, NULL, NULL, NULL, 1, ptst);
 
-        bg_init(set);
+        bg_init(set, setIndex);
         if (start)
                 bg_start(1, 1);
 

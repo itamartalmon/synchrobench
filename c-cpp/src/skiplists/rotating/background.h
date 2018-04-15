@@ -9,7 +9,7 @@
 #include "skiplist.h"
 #include "ptst.h"
 
-void bg_init(set_t *s);
+void bg_init(set_t *s, int setIndex);
 void bg_start(int sleep_time, int numOfThreads);
 void bg_stop(void);
 void bg_print_stats(void);

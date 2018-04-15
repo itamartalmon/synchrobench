@@ -163,7 +163,7 @@ typedef struct thread_data {
 	unsigned long nb_aborts_double_write;
 	unsigned long max_retries;
 	unsigned int seed;
-	set_t *set;
+    set_t *sets[32];
 	barrier_t *barrier;
 	unsigned long failures_because_contention;
 } thread_data_t;
@@ -194,6 +194,7 @@ void print_skiplist(set_t *set) {
 void *test(void *data) {
 	int unext, last = -1;
 	unsigned int val = 0;
+	int setIndex = 0;
 
 	thread_data_t *d = (thread_data_t *)data;
 
@@ -217,28 +218,32 @@ void *test(void *data) {
 			if (last < 0) { // add
 
 				val = rand_range_re(&d->seed, d->range);
-				if (sl_add_old(d->set, val, TRANSACTIONAL)) {
-					d->nb_added++;
-					last = val;
-				}
+				setIndex = val % 32;
+                if (sl_add_old(d->sets[setIndex], val, TRANSACTIONAL)) {
+                    d->nb_added++;
+                    last = val;
+                }
 				d->nb_add++;
 
 			} else { // remove
 
 				if (d->alternate) { // alternate mode (default)
-					if (sl_remove_old(d->set, last, TRANSACTIONAL)) {
-						d->nb_removed++;
-					}
+                    setIndex = val % 32;
+                    if (sl_remove_old(d->sets[setIndex], last, TRANSACTIONAL)) {
+                        d->nb_removed++;
+                    }
 					last = -1;
 				} else {
 					/* Random computation only in non-alternated cases */
 					val = rand_range_re(&d->seed, d->range);
+					setIndex = val % 32;
 					/* Remove one random value */
-					if (sl_remove_old(d->set, val, TRANSACTIONAL)) {
-						d->nb_removed++;
-						/* Repeat until successful, to avoid size variations */
-						last = -1;
-					}
+                    if (sl_remove_old(d->sets[setIndex], val, TRANSACTIONAL)) {
+                        d->nb_removed++;
+                        /* Repeat until successful, to avoid size variations */
+                        last = -1;
+                    }
+
 				}
 				d->nb_remove++;
 			}
@@ -263,8 +268,8 @@ void *test(void *data) {
 					}
 				}
 			}	else val = rand_range_re(&d->seed, d->range);
-
-			if (sl_contains_old(d->set, val, TRANSACTIONAL))
+            setIndex = val % 32;
+			if (sl_contains_old(d->sets[setIndex], val, TRANSACTIONAL))
 				d->nb_found++;
 			d->nb_contains++;
 
@@ -311,8 +316,8 @@ int main(int argc, char **argv)
 		{NULL, 0, NULL, 0}
 	};
 
-	set_t *set;
-	int i, c, size;
+    set_t *sets[32];
+    int i, c, size;
 	unsigned int last = 0;
 	unsigned int val = 0;
 	unsigned long reads, effreads, updates, effupds, aborts, aborts_locked_read, aborts_locked_write,
@@ -333,6 +338,7 @@ int main(int argc, char **argv)
 	int unit_tx = DEFAULT_ELASTICITY;
 	int alternate = DEFAULT_ALTERNATE;
 	int effective = DEFAULT_EFFECTIVE;
+	int setIndex = 0;
 	sigset_t block_set;
         unsigned long top;
         node_t *node = NULL;
@@ -482,8 +488,8 @@ int main(int argc, char **argv)
         ptst_subsystem_init();
         gc_subsystem_init();
         set_subsystem_init();
-        set = set_new(1);
-	stop = 0;
+        for (i=0; i < 32; i++) sets[i] = set_new(1, i);
+    stop = 0;
 
         global_seed = rand();
 #ifdef TLS
@@ -506,26 +512,26 @@ int main(int argc, char **argv)
 	i = 0;
 
 	while (i < initial) {
-    if(mono_int) {
-      val = i;
-    } else if(reverse_int) {
-      val = initial - 1 - i;
-    } else {
-      // Whether the key is unbalanced, if it is then just insert keys
-      // in the given range (i.e. the number of iterations)
-      if(unbalanced) {
-        val = rand_range_re(&global_seed, initial);
-      } else {
-        val = rand_range_re(&global_seed, range);
-      }
+		if (mono_int) {
+			val = i;
+		} else if (reverse_int) {
+			val = initial - 1 - i;
+		} else {
+			// Whether the key is unbalanced, if it is then just insert keys
+			// in the given range (i.e. the number of iterations)
+			if (unbalanced) {
+				val = rand_range_re(&global_seed, initial);
+			} else {
+				val = rand_range_re(&global_seed, range);
+			}
 		}
-		
-		if (sl_add_old(set, val, 0)) {
-			last = val;
-			i++;
-		}
+		setIlndex = val % 32;
+        if (sl_add_old(sets[setIndex], val, 0)) {
+            last = val;
+            i++;
+        }
 	}
-	size = set_size(set, 1);
+    for (i=0; i < 32; i++) size += set_size(sets[i], 1);
 	printf("Set size     : %d\n", size);
 	printf("Level max    : %d\n", levelmax);
 
@@ -545,25 +551,29 @@ int main(int argc, char **argv)
                 }
         }
         */
-        node = set->head;
-        while (node) {
+        for (i = 0; i < 32; i++) {
+            node = sets[i]->head;
+            while (node) {
                 int i;
                 for (i = 0; i < MAX_LEVELS; i++)
-                        node->succs[i] = NULL;
+                    node->succs[i] = NULL;
                 node->level = 0;
                 node->raise_or_remove = 0;
                 node = node->next;
+            }
+            sets[i]->head->level = 1;
         }
 
         // wait till the list is balanced
-        set->head->level = 1;
         bg_start(0, nb_threads);
-        while (set->head->level < floor_log_2(initial)) {
-            AO_nop_full();
+        for (i = 0; i < 32; i++) {
+            while (sets[i]->head->level < floor_log_2(initial)) {
+                AO_nop_full();
+            }
         }
         bg_stop();
         bg_start(50000, nb_threads);
-        printf("Number of levels is %lu\n", set->head->level);
+        //printf("Number of levels is %lu\n", set->head->level);
 
 
 	// Access set from all threads
@@ -594,7 +604,7 @@ int main(int argc, char **argv)
 		data[i].nb_aborts_double_write = 0;
 		data[i].max_retries = 0;
 		data[i].seed = rand();
-		data[i].set = set;
+		data[i].sets = sets;
 		data[i].barrier = &barrier;
 		data[i].failures_because_contention = 0;
                 if (pthread_create(&threads[i], &attr, test, (void *)(&data[i])) != 0) {
@@ -697,7 +707,10 @@ int main(int argc, char **argv)
 		if (max_retries < data[i].max_retries)
 			max_retries = data[i].max_retries;
 	}
-	printf("Set size      : %d (expected: %d)\n", set_size(set,1), size);
+
+	int setSize = 0;
+    for (i=0; i < 32; i++) setSize += set_size(sets[i], 1);
+	printf("Set size      : %d (expected: %d)\n", setSize, size);
 	printf("Duration      : %d (ms)\n", duration);
 	printf("#txs          : %lu (%f / s)\n", reads + updates, (reads + updates) * 1000.0 / duration);
 
@@ -731,11 +744,12 @@ int main(int argc, char **argv)
         bg_print_stats();
 
         //sl_set_print(set, 1);
-        set_print_nodenums(set, 0);
+    for (i=0; i < 32; i++) set_print_nodenums(sets[i], 0);;
         gc_subsystem_destroy();
 
 	// Delete set
-        set_delete(set);
+    for (i=0; i < 32; i++) set_delete(sets[i]);;
+
 
 	// Cleanup STM
 	TM_SHUTDOWN();
