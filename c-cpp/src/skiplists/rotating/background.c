@@ -131,13 +131,10 @@ static void get_index_above(node_t *head,
  */
 static void* bg_loop(void *args)
 {
-        int counter = 0;
         while(1) {
             for (int i = 0; i < 32; i++) {
                 bg_loop_helper(sets[i]);
             }
-            //printf("%d %d", counter, bg_finished);
-            counter++;
             if (bg_finished)
                 break;
         }
@@ -294,9 +291,12 @@ void bg_loop_helper(set_t *set) {
  */
 static int bg_trav_nodes(ptst_t *ptst) {
         int raised = 0;
-        for (int i = 0; i < 32; i++)
-        if (raised == 0)
-            raised = bg_trav_nodes_helper(sets[i], ptst);
+        int tmp = 0;
+        for (int i = 0; i < 32; i++) {
+                tmp = bg_trav_nodes_helper(sets[i], ptst);
+                if (raised == 0 && tmp != 0)
+                        raised = tmp;
+        }
         return raised;
 }
 
@@ -552,7 +552,6 @@ void bg_print_stats(void)
         #ifdef BG_STATS
         printf("Loops = %lu\n", bg_stats.loops);
         printf("Raises = %lu\n", bg_stats.raises);
-        //printf("Levels = %lu\n", set->head->level);
         printf("Lowers = %lu\n", bg_stats.lowers);
         printf("Delete Attempts = %lu\n", bg_stats.delete_attempts);
         printf("Delete Succeeds = %lu\n", bg_stats.delete_succeeds);
