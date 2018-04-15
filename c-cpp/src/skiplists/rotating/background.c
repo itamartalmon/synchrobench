@@ -112,7 +112,7 @@ int bg_should_delete;
 static void* bg_loop(void *args);
 static void bg_loop_helper(set_t *set);
 static int bg_trav_nodes(ptst_t *ptst);
-static void bg_trav_nodes_helper(set_t *set, ptst_t *ptst);
+static int bg_trav_nodes_helper(set_t *set, ptst_t *ptst);
 static void bg_lower_ilevel(ptst_t *ptst, set_t *set);
 static int bg_raise_ilevel(int height, ptst_t *ptst, set_t *set);
 static void get_index_above(node_t *head,
@@ -131,8 +131,15 @@ static void get_index_above(node_t *head,
  */
 static void* bg_loop(void *args)
 {
-        for (int i = 0; i < 32; i++) {
-            bg_loop_helper(sets[i]);
+        int counter = 0;
+        while(1) {
+            for (int i = 0; i < 32; i++) {
+                bg_loop_helper(sets[i]);
+            }
+            //printf("%d %d", counter, bg_finished);
+            counter++;
+            if (bg_finished)
+                break;
         }
         return NULL;
 }
@@ -166,24 +173,23 @@ void bg_loop_helper(set_t *set) {
         bg_stats.delete_succeeds = 0;
         #endif
 
-        while (1) {
-                #ifdef SLEEP_BY_NUM_OF_THREADS
+
+
+        #ifdef SLEEP_BY_NUM_OF_THREADS
 		if (flag)
 			usleep(offset_sleep_time * 2);
 		else
-              		usleep(offset_sleep_time);
-                #else
+		    usleep(offset_sleep_time);
+		#else
 		#ifdef SLEEP_ZERO
 		if (flag)
 			usleep(0);
 		else
-                	usleep(bg_sleep_time * 2);
+		    usleep(bg_sleep_time * 2);
 		#else
 			usleep(bg_sleep_time);
-		#endif
-                #endif
-                if (bg_finished)
-                        break;
+        #endif
+			#endif
 
 		flag = (flag-1) * -1;
                 zero = sl_zero;
@@ -251,7 +257,7 @@ void bg_loop_helper(set_t *set) {
                 #endif
                 if (threshold) {
                         if (head->level > 1) {
-                                bg_lower_ilevel(ptst);
+                                bg_lower_ilevel(ptst, set);
                                 #ifdef BG_STATS
                                 ++(bg_stats.lowers);
                                 #endif
@@ -275,7 +281,6 @@ void bg_loop_helper(set_t *set) {
                 }
                 #endif
                 BARRIER();
-        }
 }
 
 /**
@@ -288,11 +293,14 @@ void bg_loop_helper(set_t *set) {
  * have been started but not completed.
  */
 static int bg_trav_nodes(ptst_t *ptst) {
+        int raised = 0;
         for (int i = 0; i < 32; i++)
-        bg_trav_nodes_helper(sets[i], ptst);
+        if (raised == 0)
+            raised = bg_trav_nodes_helper(sets[i], ptst);
+        return raised;
 }
 
-void bg_trav_nodes_helper(set_t *set, ptst_t *ptst) {
+int bg_trav_nodes_helper(set_t *set, ptst_t *ptst) {
         node_t *prev, *node, *next;
         node_t *above_head = set->head, *above_prev, *above_next;
         unsigned long zero = sl_zero;
@@ -490,14 +498,16 @@ void bg_lower_ilevel(ptst_t *ptst, set_t *set)
 void bg_init(set_t *s, int setIndex)
 {
         sets[setIndex] = s;
-        bg_finished = 0;
-        bg_running = 0;
+}
 
-        bg_stats.loops = 0;
-        bg_stats.raises = 0;
-        bg_stats.lowers = 0;
-        bg_stats.delete_attempts = 0;
-        bg_stats.delete_succeeds = 0;
+void bg_init_helper() {
+    bg_finished = 0;
+    bg_running = 0;
+    bg_stats.loops = 0;
+    bg_stats.raises = 0;
+    bg_stats.lowers = 0;
+    bg_stats.delete_attempts = 0;
+    bg_stats.delete_succeeds = 0;
 }
 
 /**
@@ -524,7 +534,7 @@ void bg_start(int sleep_time, int numOfThreads)
 void bg_stop(void)
 {
         /* XXX not thread safe XXX */
-        if (bg_running) {
+    if (bg_running) {
                 bg_finished = 1;
                 pthread_join(bg_thread, NULL);
                 BARRIER();

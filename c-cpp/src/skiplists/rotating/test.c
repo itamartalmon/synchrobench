@@ -116,9 +116,9 @@ void barrier_cross(barrier_t *b)
 inline long rand_range(long r) {
 	int m = RAND_MAX;
 	int d, v = 0;
-	
+
 	do {
-		d = (m > r ? r : m);		
+		d = (m > r ? r : m);
 		v += 1 + (int)(d * ((double)rand()/((double)(m)+1.0)));
 		r -= m;
 	} while (r > 0);
@@ -130,9 +130,9 @@ long rand_range(long r);
 inline long rand_range_re(unsigned int *seed, long r) {
 	int m = RAND_MAX;
 	int d, v = 0;
-	
+
 	do {
-		d = (m > r ? r : m);		
+		d = (m > r ? r : m);
 		v += 1 + (int)(d * ((double)rand_r(seed)/((double)(m)+1.0)));
 		r -= m;
 	} while (r > 0);
@@ -317,7 +317,8 @@ int main(int argc, char **argv)
 	};
 
     set_t *sets[32];
-    int i, c, size;
+    int setSizes[32];
+    int i, c, size =0;
 	unsigned int last = 0;
 	unsigned int val = 0;
 	unsigned long reads, effreads, updates, effupds, aborts, aborts_locked_read, aborts_locked_write,
@@ -340,10 +341,10 @@ int main(int argc, char **argv)
 	int effective = DEFAULT_EFFECTIVE;
 	int setIndex = 0;
 	sigset_t block_set;
-        unsigned long top;
-        node_t *node = NULL;
-				int unbalanced = DEFAULT_UNBALANCED;
-	
+	unsigned long top;
+	node_t *node = NULL;
+	int unbalanced = DEFAULT_UNBALANCED;
+
 	// By default, do not use mono int
   int mono_int = 0;
   // By default do not use reverse int also
@@ -440,7 +441,7 @@ int main(int argc, char **argv)
     printf("ERROR: Can only choose one from -v and -m\n");
     exit(1);
   }
-
+    int initial32 = initial/32;
 	assert(duration >= 0);
 	assert(initial >= 0);
 	assert(nb_threads > 0);
@@ -482,13 +483,13 @@ int main(int argc, char **argv)
 	else
 		srand(seed);
 
-	levelmax = floor_log_2((unsigned int) initial);
+	levelmax = floor_log_2((unsigned int) (initial32));
 
         /* create the skip list set and do inits */
         ptst_subsystem_init();
         gc_subsystem_init();
         set_subsystem_init();
-        for (i=0; i < 32; i++) sets[i] = set_new(1, i);
+        set_new(1, sets);
     stop = 0;
 
         global_seed = rand();
@@ -525,56 +526,45 @@ int main(int argc, char **argv)
 				val = rand_range_re(&global_seed, range);
 			}
 		}
-		setIlndex = val % 32;
+		setIndex = val % 32;
         if (sl_add_old(sets[setIndex], val, 0)) {
             last = val;
             i++;
         }
 	}
-    for (i=0; i < 32; i++) size += set_size(sets[i], 1);
+
+    for (i=0; i < 32; i++) {
+	    setSizes[i] = set_size(sets[i], 1);
+	    size += setSizes[i];
+	}
+    bg_stop();
 	printf("Set size     : %d\n", size);
-	printf("Level max    : %d\n", levelmax);
-
-        // nullify all the index levels
-        bg_stop();
-        /*
-        top = set->head->level-1;
-        for (i = 0; i <= top; i++) {
-                node_t *prev = set->head;
-                node_t *node = prev->succs[IDX(i,sl_zero)];
-                while (node) {
-                        prev->succs[IDX(i,sl_zero)] = NULL;
-                        prev->level = 0;
-                        prev->raise_or_remove = 0;
-                        prev = node;
-                        node = node->succs[IDX(i, sl_zero)];
-                }
+    printf("Level max    : %d\n", levelmax);
+    int k;
+    for (k = 0; k < 32; k++) {
+        node = sets[k]->head;
+        while (node) {
+            int i;
+            for (i = 0; i < MAX_LEVELS; i++)
+                node->succs[i] = NULL;
+            node->level = 0;
+            node->raise_or_remove = 0;
+            node = node->next;
         }
-        */
-        for (i = 0; i < 32; i++) {
-            node = sets[i]->head;
-            while (node) {
-                int i;
-                for (i = 0; i < MAX_LEVELS; i++)
-                    node->succs[i] = NULL;
-                node->level = 0;
-                node->raise_or_remove = 0;
-                node = node->next;
-            }
-            sets[i]->head->level = 1;
-        }
+        sets[k]->head->level = 1;
+    }
+    // wait till the list is balanced
+    bg_start(0, nb_threads);
+    for (i = 0; i < 32; i++) {
 
-        // wait till the list is balanced
-        bg_start(0, nb_threads);
-        for (i = 0; i < 32; i++) {
-            while (sets[i]->head->level < floor_log_2(initial)) {
-                AO_nop_full();
-            }
+        while (sets[i]->head->level < floor_log_2(setSizes[i])) {
+            AO_nop_full();
         }
-        bg_stop();
-        bg_start(50000, nb_threads);
-        //printf("Number of levels is %lu\n", set->head->level);
+    }
+    bg_stop();
+	bg_start(50000, nb_threads);
 
+	//printf("Number of levels is %lu\n", set->head->level);
 
 	// Access set from all threads
 	barrier_init(&barrier, nb_threads + 1);
@@ -604,7 +594,8 @@ int main(int argc, char **argv)
 		data[i].nb_aborts_double_write = 0;
 		data[i].max_retries = 0;
 		data[i].seed = rand();
-		data[i].sets = sets;
+		for (int k = 0; k < 32; k++)
+		    data[i].sets[k] = sets[k];
 		data[i].barrier = &barrier;
 		data[i].failures_because_contention = 0;
                 if (pthread_create(&threads[i], &attr, test, (void *)(&data[i])) != 0) {
@@ -709,7 +700,10 @@ int main(int argc, char **argv)
 	}
 
 	int setSize = 0;
-    for (i=0; i < 32; i++) setSize += set_size(sets[i], 1);
+    for (i=0; i < 32; i++) {
+        setSizes[i] = set_size(sets[i], 1);
+        setSize += setSizes[i];
+    }
 	printf("Set size      : %d (expected: %d)\n", setSize, size);
 	printf("Duration      : %d (ms)\n", duration);
 	printf("#txs          : %lu (%f / s)\n", reads + updates, (reads + updates) * 1000.0 / duration);
