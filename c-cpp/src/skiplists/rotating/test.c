@@ -737,12 +737,13 @@ int main(int argc, char **argv)
         bg_stop();
         bg_print_stats();
 
-        //sl_set_print(set, 1);
-    for (i=0; i < 32; i++) set_print_nodenums(sets[i], 0);;
-        gc_subsystem_destroy();
+    for (i=0; i < 32; i++) {
+		set_print_nodenums(sets[i], 0);
+	}
+    gc_subsystem_destroy();
 
 	// Delete set
-    for (i=0; i < 32; i++) set_delete(sets[i]);;
+    set_delete(sets[0]);
 
 
 	// Cleanup STM
