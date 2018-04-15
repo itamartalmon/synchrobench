@@ -232,7 +232,7 @@ static void* bg_loop(void *args)
 
                 // if needed, remove the lowest index level
                 #ifdef LEVEL_RATE_DELETE
-                threshold = bg_non_deleted * 3 < bg_first_level * 4;
+                threshold = bg_non_deleted * 2 < bg_first_level * 3;
                 #else
                 #ifdef CONST_THRESHOLD_LEVEL_DELETE
                 threshold = bg_non_deleted * threshold_level_delete < bg_tall_deleted;
