@@ -10,7 +10,7 @@ def create_plot():
 
     key_words = ['sleep', 'max-level', 'help-remove', 'level-delete-original', 'level-delete-by-ratio']
     for k in key_words:
-        compare_lists(results_dict, [l for l in results_dict.keys() if k in l], k)
+        compare_lists(results_dict, ['originl-rotating-skiplist'] + [l for l in results_dict.keys() if k in l], k)
 
 
 def compare_lists(results_dict, lists, output_name):
