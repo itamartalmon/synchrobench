@@ -594,7 +594,7 @@ int main(int argc, char **argv)
 		data[i].nb_aborts_double_write = 0;
 		data[i].max_retries = 0;
 		data[i].seed = rand();
-		for (int k = 0; k < 32; k++)
+		for (k = 0; k < 32; k++)
 		    data[i].sets[k] = sets[k];
 		data[i].barrier = &barrier;
 		data[i].failures_because_contention = 0;
