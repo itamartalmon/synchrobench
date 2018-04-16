@@ -12,6 +12,12 @@ Alan~Fekete Dick, Ian and Vincent Gramoli,
 \newblock in {\em Concurrency and Computation: Practice and Experience}, 2017,
   vol.~29, p.~4.
 
+\bibitem{C4}
+Keir Fraser,
+\newblock ``Practical lock-freedom,''
+\newblock in {\em University of Cambridge, Computer Laboratory}, 2004, vol.
+  Feb.
+
 \bibitem{C2}
 Gramoli~Vincent Crain, Tyler and Michel Raynal,
 \newblock ``No hot spot non-blocking skip list,''

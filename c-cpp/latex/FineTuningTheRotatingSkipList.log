@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  10 APR 2018 10:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  16 APR 2018 11:28
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -111,7 +111,11 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen112
 \Gin@req@width=\dimen113
 )
-(FineTuningTheRotatingSkipList.aux)
+(FineTuningTheRotatingSkipList.aux
+
+LaTeX Warning: Label `ssec:bt' multiply defined.
+
+)
 \openout1 = `FineTuningTheRotatingSkipList.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
@@ -127,8 +131,7 @@ LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 24.
-
-("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
+ ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 ("D:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
@@ -191,93 +194,109 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 27.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 46.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 53.
 
 ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omsptm.fd"
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 46.
-
-
-! LaTeX Error: There's no line here to end.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.52 D
-      etailed descriptions of the changes made, in addition to the evaluatio...
-
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 56.
-("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-<images/max-level_plot.png, id=1, 433.62pt x 433.62pt>
-File: images/max-level_plot.png Graphic file (type png)
-
-<use images/max-level_plot.png>
-Package pdftex.def Info: images/max-level_plot.png used on input line 111.
-(pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no ˆ in font ptmr7t!
+Missing character: There is no ’ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
  [1{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 
- <./images/max-level_plot.png>]
-<images/level-delete-original_plot.png, id=13, 433.62pt x 433.62pt>
+]
+Overfull \hbox (3.90689pt too wide) in paragraph at lines 66--67
+\OT1/ptm/m/n/10 Each up-date op-er-a-tion ($\OML/cmm/m/it/10 put$\OT1/ptm/m/n/1
+0 , $\OML/cmm/m/it/10 delete$\OT1/ptm/m/n/10 ) avoids con-tention hotspots
+ []
+
+[2]
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no ™ in font ptmr7t!
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 101.
+
+ ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+<images/max-level_plot.png, id=17, 433.62pt x 433.62pt>
+File: images/max-level_plot.png Graphic file (type png)
+
+<use images/max-level_plot.png>
+Package pdftex.def Info: images/max-level_plot.png used on input line 156.
+(pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
+
+<images/level-delete-original_plot.png, id=19, 433.62pt x 433.62pt>
 File: images/level-delete-original_plot.png Graphic file (type png)
 
 <use images/level-delete-original_plot.png>
 Package pdftex.def Info: images/level-delete-original_plot.png used on input li
-ne 148.
+ne 193.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
-
-<images/level-delete-by-ratio_plot.png, id=14, 433.62pt x 433.62pt>
+ [3]
+<images/level-delete-by-ratio_plot.png, id=24, 433.62pt x 433.62pt>
 File: images/level-delete-by-ratio_plot.png Graphic file (type png)
 
 <use images/level-delete-by-ratio_plot.png>
 Package pdftex.def Info: images/level-delete-by-ratio_plot.png used on input li
-ne 171.
+ne 216.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/help-remove_plot.png, id=15, 433.62pt x 433.62pt>
+<images/help-remove_plot.png, id=25, 433.62pt x 433.62pt>
 File: images/help-remove_plot.png Graphic file (type png)
 
 <use images/help-remove_plot.png>
-Package pdftex.def Info: images/help-remove_plot.png used on input line 198.
+Package pdftex.def Info: images/help-remove_plot.png used on input line 243.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/sleep_plot.png, id=16, 433.62pt x 433.62pt>
+<images/sleep_plot.png, id=26, 433.62pt x 433.62pt>
 File: images/sleep_plot.png Graphic file (type png)
 
 <use images/sleep_plot.png>
-Package pdftex.def Info: images/sleep_plot.png used on input line 219.
+Package pdftex.def Info: images/sleep_plot.png used on input line 264.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
- (FineTuningTheRotatingSkipList.bbl [2 <./images/level-delete-original_plot.png
-> <./images/level-delete-by-ratio_plot.png>])
-[3 <./images/help-remove_plot.png> <./images/sleep_plot.png>]
-(FineTuningTheRotatingSkipList.aux) ) 
+ [4 <./images/max-level_plot.png> <./images/level-delete-original_plot.png> <./
+images/level-delete-by-ratio_plot.png>]
+(FineTuningTheRotatingSkipList.bbl) [5 <./images/help-remove_plot.png> <./image
+s/sleep_plot.png>] (FineTuningTheRotatingSkipList.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 2262 strings out of 493335
- 30608 string characters out of 3139235
- 94168 words of memory out of 3000000
- 5755 multiletter control sequences out of 15000+200000
- 17355 words of font info for 40 fonts, out of 3000000 for 9000
+ 2271 strings out of 493335
+ 30700 string characters out of 3139235
+ 101280 words of memory out of 3000000
+ 5764 multiletter control sequences out of 15000+200000
+ 17809 words of font info for 42 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,7n,23p,441b,247s stack positions out of 5000i,500n,10000p,200000b,50000s
-{D:/Program Files/MiKTeX 2.9/fonts/enc/dvi
-ps/fontname/8r.enc}<D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmsy10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><D:/
+ 37i,7n,23p,3470b,247s stack positions out of 5000i,500n,10000p,200000b,50000s
+{D:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<D:/Program File
+s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><D:/Program Files/MiKTeX
+ 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><D:/Program Files/MiKTeX 2.9/font
+s/type1/public/amsfonts/cm/cmr10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmsy5.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><D:/
 Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><D:/Program Files/MiK
 TeX 2.9/fonts/type1/urw/times/utmr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (3 pages, 280043 bytes).
+Output written on FineTuningTheRotatingSkipList.pdf (5 pages, 331774 bytes).
 PDF statistics:
- 44 PDF objects out of 1000 (max. 8388607)
+ 70 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
