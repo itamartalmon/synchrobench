@@ -130,8 +130,9 @@ static void get_index_above(node_t *head,
  */
 static void* bg_loop(void *args)
 {
+	int i;
         while(1) {
-            for (int i = 0; i < 32; i++) {
+            for (i = 0; i < 32; i++) {
                 bg_loop_helper(sets[i]);
             }
             if (bg_finished)
