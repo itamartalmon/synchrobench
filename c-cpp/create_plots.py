@@ -8,7 +8,7 @@ def create_plot():
     with open(RESULTS_PATH, 'rb') as f:
         results_dict = pickle.load(f)
 
-    key_words = ['sleep', 'max-level', 'help-remove', 'level-delete-original', 'level-delete-by-ratio']
+    key_words = ['many-skiplists', 'sleep', 'max-level', 'help-remove', 'level-delete-original', 'level-delete-by-ratio']
     for k in key_words:
         compare_lists(results_dict, ['originl-rotating-skiplist'] + [l for l in results_dict.keys() if k in l], k)
 
