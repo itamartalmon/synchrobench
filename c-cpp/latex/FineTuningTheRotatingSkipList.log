@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  18 APR 2018 18:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  20 APR 2018 13:06
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -111,11 +111,7 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen112
 \Gin@req@width=\dimen113
 )
-(FineTuningTheRotatingSkipList.aux
-
-LaTeX Warning: Label `ssec:bt' multiply defined.
-
-)
+(FineTuningTheRotatingSkipList.aux)
 \openout1 = `FineTuningTheRotatingSkipList.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
@@ -131,7 +127,8 @@ LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 24.
- ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
+
+("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptm.fd"
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 ("D:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
@@ -231,72 +228,69 @@ LaTeX Font Info:    Try loading font information for OT1+pcr on input line 101.
 
  ("D:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-<images/max-level_plot.png, id=17, 433.62pt x 433.62pt>
+) [3]
+<images/max-level_plot.png, id=21, 433.62pt x 433.62pt>
 File: images/max-level_plot.png Graphic file (type png)
 
 <use images/max-level_plot.png>
-Package pdftex.def Info: images/max-level_plot.png used on input line 156.
+Package pdftex.def Info: images/max-level_plot.png used on input line 134.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/level-delete-original_plot.png, id=19, 433.62pt x 433.62pt>
+<images/level-delete-original_plot.png, id=23, 433.62pt x 433.62pt>
 File: images/level-delete-original_plot.png Graphic file (type png)
 
 <use images/level-delete-original_plot.png>
 Package pdftex.def Info: images/level-delete-original_plot.png used on input li
-ne 193.
+ne 156.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
- [3]
-<images/level-delete-by-ratio_plot.png, id=24, 433.62pt x 433.62pt>
+ [4 <./images/max-level_plot.png> <./images/level-delete-original_plot.png>]
+<images/level-delete-by-ratio_plot.png, id=29, 433.62pt x 433.62pt>
 File: images/level-delete-by-ratio_plot.png Graphic file (type png)
 
 <use images/level-delete-by-ratio_plot.png>
 Package pdftex.def Info: images/level-delete-by-ratio_plot.png used on input li
-ne 216.
+ne 179.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/help-remove_plot.png, id=25, 433.62pt x 433.62pt>
+<images/help-remove_plot.png, id=30, 433.62pt x 433.62pt>
 File: images/help-remove_plot.png Graphic file (type png)
 
 <use images/help-remove_plot.png>
-Package pdftex.def Info: images/help-remove_plot.png used on input line 243.
+Package pdftex.def Info: images/help-remove_plot.png used on input line 206.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/sleep_plot.png, id=26, 433.62pt x 433.62pt>
+<images/sleep_plot.png, id=31, 433.62pt x 433.62pt>
 File: images/sleep_plot.png Graphic file (type png)
 
 <use images/sleep_plot.png>
-Package pdftex.def Info: images/sleep_plot.png used on input line 264.
+Package pdftex.def Info: images/sleep_plot.png used on input line 227.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
- [4 <./images/max-level_plot.png> <./images/level-delete-original_plot.png> <./
-images/level-delete-by-ratio_plot.png>]
-(FineTuningTheRotatingSkipList.bbl) [5 <./images/help-remove_plot.png> <./image
-s/sleep_plot.png>] (FineTuningTheRotatingSkipList.aux)
+ [5 <./images/level-delete-by-ratio_plot.png> <./images/help-remove_plot.png> <
+./images/sleep_plot.png>]
+(FineTuningTheRotatingSkipList.bbl) [6
 
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+] (FineTuningTheRotatingSkipList.aux) ) 
 Here is how much of TeX's memory you used:
- 2271 strings out of 493335
- 30700 string characters out of 3139235
- 101280 words of memory out of 3000000
- 5764 multiletter control sequences out of 15000+200000
+ 2273 strings out of 493335
+ 30727 string characters out of 3139235
+ 101253 words of memory out of 3000000
+ 5766 multiletter control sequences out of 15000+200000
  17809 words of font info for 42 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,7n,23p,3470b,247s stack positions out of 5000i,500n,10000p,200000b,50000s
-{D:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<D:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><D:/Program Files/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><D:/Program Files/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmr10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmsy10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmsy5.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><D:/
-Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><D:/Program Files/MiK
-TeX 2.9/fonts/type1/urw/times/utmr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/typ
-e1/urw/times/utmri8a.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (5 pages, 345651 bytes).
+{D:/Program Files/MiKTeX 2.9/fonts/enc/d
+vips/fontname/8r.enc}<D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmmi10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.
+pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><D:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/Program F
+iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><D:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fo
+nts/type1/urw/courier/ucrr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/t
+imes/utmb8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><
+D:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on FineTuningTheRotatingSkipList.pdf (6 pages, 376485 bytes).
 PDF statistics:
- 70 PDF objects out of 1000 (max. 8388607)
+ 73 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

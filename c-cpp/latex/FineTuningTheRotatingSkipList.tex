@@ -76,7 +76,7 @@ The wheel size is adjusted without having to mutate a pointer, simply by over pr
 The background (or maintenance) thread executes a loop where it sleeps for 50 microseconds (\textbf{a heuristic parameter}). The maintenance thread raises wheels of non-deleted nodes by calling the $raise bottom level$ function. This raise is compensated with a constant-time lowering specific to the algorithm. This periodic adaptation makes it unnecessary to use the traditional pseudo-random generators as the lowering and raising (the action of increasing the height of a tower) become deterministic. The $lower skiplist$ function discards, in constant-time, the entire bottom level of the skip list by simply changing the ZERO counter used in the modulo arithmetic, without blocking application threads. Note that the $lower skiplist$ is followed by a $cleanup bottom$ level that takes linear time to reclaim the memory of the deleted level, however, all traversals starting after the ZERO increment ignores this level. The $lower skiplist$ function is called, with some heuristic, only if is lowering necessary returns true. \textbf{The chosen heuristic was if there are 10 times more deleted nodes with height greater than 1 than bottom-level nodes}. The $raise bottom level$ also cleans up the skip list by removing the logically deleted nodes. After all logically deleted nodes are discarded, their wheels having been progressively lowered down to a single level, they are garbage collected using an epoch based memory reclamation algorithm discussed later on. The $raise node$ and $raise index level$ simply consist, for each level from bottom to top, of raising each node in the middle of three consecutive non-deleted nodes of the same height. The $help remove$ function called by the $remove$ function or by an application thread removes the deleted nodes. It actually only removes nodes that do not have any wheel successors. Nodes with wheels are removed differently by first lowering their levels. Deleted wheels are simply removed later by the background thread within a $help remove$ during maintenance. Note that at the end of the removal the prev field can be updated without synchronization as it does not have to be set to the immediate previous node.
 
 \subsubsection{Memory reclamation}
-\label{ssec:bt}
+\label{ssec:mr}
 
 The memory reclamation of our rotating skip list is based on an epoch based garbage collection algorithm similar to the one used in Fraser’s skip list \cite{C4} with some differences. The garbage collector of Fraser’s skip list is partitioned into sections responsible for managing nodes of a particular skip list level. Partitioning the memory manager like this means that requests to the memory manager regarding different skip list levels do not need to conflict with one another. In contrast, the rotating skip list does no such partitioning of memory management responsibilities, since the rotating skip list uses only one node size for all list elements regardless of their level. This increases the probability of contention in the memory reclamation module when a large number of threads issue memory requests simultaneously.
 
@@ -103,52 +103,30 @@ The complete code, including the compiled data strucures and the evaluation scri
 \section{LEVEL HIGHT HEURISTICS}
 \label{sec:lhh}
 
-The Maximum Level of the data structure , BLABLABLA
+The skip list maximum level hight is considered to be an important factor to its performence. The reasons for that are three fold:
+
+\begin{itemize}
+	\item  A maximum level lower than $\log{N}$, where $N$ is the number of elements in the list, will inevitably hurt the balance properties of the structure and will add to the traversal length
+	\item A common cause of contention is the bottle neck at the top layers of the skip list (similar to the root of a tree structure)
+	\item Due to its random properties, it is possible (and in fact plausible, in some implementataion) to have unnecessary high levels that will add some overhead work for each traversal
+\end{itemize}
+
+In all the implementations we incountered the maximum level of the skip list is bound by some constant (usually the word size of the keys, \textbf{in the case of the rotating skip list - 20}). We examined the effects of choosing the that property in fixed and dynamic ways.
 
 \subsection{Fixed Max Level}
 \label{ssec:fml}
 
-Fixing the Max level is commonly use, blablblal
-
-As can be seen on figure BLABLALB, ads
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
+Fixing the Max level to a constant is the simplest way to set it. It is a sensible solution where we know the expected size of our structure and expect it to be relativly stable. We benchmarked the original rotating skip list value of 20, against hardcoded values of 10 and 30. We tested each implementation for 10 runs, 10 seconds each, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 30 (and 70) percent.
 
 \subsection{Dynamic Max Level}
 \label{ssec:dml}
 
-Dynamic Max level is more blablblal
+Dynamic Max level is a more sensible solution in cases where we do not know the expected size of the list or that it may changed drastically over time. In our imlementation we decided to add a dynamic parameter that stop the list from growing above a certain hight. This parameter is set to be $\log{N}$ in the end of each of the background loop run, where $N$ is the number of non-deleted elements encountered by the background thread. We benchmarked our implementation against the original rotating skip list implementation with the same test properties as above.
 
 \subsubsection{Evaluation}
 \label{sssec:ml-evl}
 
-As can be seen on figure bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
+As can be seen on figure 1, fixing the maximum level to be lower or higher than the original 20 did not cause any significant effect on the rotating skip list performance. This might be due to the deterministic way the background thread increasing the index levels of the nodes - when the traversal incounters 3 neighbouring nodes with similar level - it will increase the middle one. This significantly reduces the chance to have unnecessary high levels since it can only happen in cases where a very large amount of nodes are deleted. Setting the maximum level dynamically did not improve the performence as well, it is possible that the test conditions were not radical enough to expose its effect but since there was empirically no overhead we believe it is safer to use it anyway. Examining the effect of a dynamic maximum level on a skip list implementation with random level-rise remains for future work.
 
 \begin{figure}
 	\caption{Max Level Heuristics Performence}
@@ -156,36 +134,21 @@ bla bla bla bla bla bla
 	\includegraphics[width=0.4\textwidth]{max-level_plot}
 \end{figure}
 
-bli bla blu
 
 \section{ROTAION DELETION HEURISTICS}
 \label{sec:rdh}
 
-When deleting blablabae , BLABLABLA
+One of the main features of the rotating skip list is the rotation level delete - which efficiantly deletes the first index level at once by increasing the level modulu parameter. The motivation was to balance the effect of deletions on the structure balance (in the rotating skip list - raising nodes indexes cannot cause imbalance due to its deterministic implementation). In the original imlementation, the heuristic used to initiate this action is when the background thread incounter more than 10 times deleted high level nodes (reffered to as tall-deletions) than the number of non-deleted nodes in a single maintenance loop. The authers stated that it might be interesting to investigate different and more dynamic heuristics. We examined the effects of setting different tal-deletion rate constants and implemented our own heurictic (which is based on the size rate between the bottom and the first level and will be described later with more details).
 
 \subsection{Tall-Deletions-Size Rate}
 \label{ssec:tds}
 
-In the original paper use, blablblal
+Since it does not directly relate to the balance properties of the structure - the idea of conditioning the first layer deletion with the number of the deleted high level nodes might sound a bit strange at first, but since this is the only way that a balanced rotating skip list can become imbalanced, it is a sensible and practical solution (as the background thread is the only one which deletes tall nodes it can easily count them with almost no work or implementation complexity overhead). We wanted to check the way in which the tall-deletion threshold rate parameter influence the skip list performance. We benchmarked the original threshold value of 10 against values of 5, 1 and $1/2$ for 10 runs, 10 seconds each, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 20 (and 50) percent.
 
 \subsubsection{Evaluation}
 \label{sssec:tds-evl}
 
-As can be seen on figure BLABLALB, ads
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
+As can be seen on figure 2, 
 
 \begin{figure}
 	\caption{Tall Delelted By Size Deletion Performence}
@@ -268,7 +231,7 @@ As can be seen on figure BLABLALB, ads
 \section{Experimental Settings}
 \label{sec:exp}
 
-We used multicore machine with 8 AMD x86_64 Opteron(tm) Processor 6376 each have 8 cores that runs at 2.4 GHz. with L1d cache size of 16K, L1i cache size of 64K, L2 cache size of 2048K and L3 cache size of 6144K.
+We used multicore machine with 8 AMD x86\_64 Opteron(tm) Processor 6376 each have 8 cores that runs at 2.4 GHz. with L1d cache size of 16K, L1i cache size of 64K, L2 cache size of 2048K and L3 cache size of 6144K.
 
 \section{Future Research}
 \label{sec:foot}
