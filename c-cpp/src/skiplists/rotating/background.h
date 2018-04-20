@@ -10,8 +10,8 @@
 #include "ptst.h"
 
 void bg_init(set_t *s, int setIndex);
-void bg_init_helper();
-void bg_start(int sleep_time, int numOfThreads);
+void bg_init_helper(int half_nb_threads);
+void bg_start(int sleep_time);
 void bg_stop(void);
 void bg_print_stats(void);
 void bg_remove(node_t *prev, node_t *node, ptst_t *ptst);

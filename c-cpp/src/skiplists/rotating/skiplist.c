@@ -134,15 +134,15 @@ void marker_delete(node_t *node, ptst_t *ptst)
  * Note: A background thread to update the index levels of the
  * skip list is created and kick-started as part of this routine.
  */
-void set_new(int start, set_t **sets)
+void set_new(int start, set_t **sets, int half_nb_threads)
 {
         ptst_t *ptst;
 
         ptst = ptst_critical_enter();
-        bg_init_helper();
+        bg_init_helper(half_nb_threads);
         sl_zero = 0; /* the zero index is initially 0 */
         int i;
-        for (i = 0; i < 32; i++) {
+        for (i = 0; i < half_nb_threads; i++) {
                 sets[i] = malloc(sizeof(set_t));
                 if (!sets[i]) {
                         perror("Failed to malloc a set\n");
@@ -154,7 +154,7 @@ void set_new(int start, set_t **sets)
                 bg_init(sets[i], i);
         }
         if (start)
-                bg_start(1, 1);
+                bg_start(1);
         ptst_critical_exit(ptst);
 }
 

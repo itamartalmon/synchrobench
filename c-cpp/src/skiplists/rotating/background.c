@@ -55,7 +55,7 @@ common with other multi-threaded skip list implementations.
 #include "garbagecoll.h"
 #include "ptst.h"
 
-static set_t *sets[32];
+static set_t **sets;
 
 static pthread_t bg_thread;    /* background thread */
 
@@ -101,6 +101,7 @@ static unsigned int offset_sleep_time;
 static int bg_deleted;
 static int bg_tall_deleted;
 static int nThreads;
+static int half_nThreads;
 static int bg_sleep_time;
 static int bg_counter;
 static int bg_go;
@@ -132,7 +133,7 @@ static void* bg_loop(void *args)
 {
 	int i;
         while(1) {
-            for (i = 0; i < 32; i++) {
+            for (i = 0; i < half_nThreads; i++) {
                 bg_loop_helper(sets[i]);
             }
             if (bg_finished)
@@ -489,7 +490,10 @@ void bg_init(set_t *s, int setIndex)
         sets[setIndex] = s;
 }
 
-void bg_init_helper() {
+void bg_init_helper(int half_nb_threads) {
+    sets = malloc(half_nb_threads * sizeof(set_t*));
+    half_nThreads = half_nb_threads;
+    nThreads = half_nb_threads * 2;
     bg_finished = 0;
     bg_running = 0;
     bg_stats.loops = 0;
@@ -505,12 +509,11 @@ void bg_init_helper() {
  * Note: Only start the background thread if it is not currently
  * running.
  */
-void bg_start(int sleep_time, int numOfThreads)
+void bg_start(int sleep_time)
 {
         /* XXX not thread safe  XXX */
         if (!bg_running) {
                 bg_sleep_time = sleep_time;
-                nThreads = numOfThreads;
                 bg_running = 1;
                 bg_finished = 0;
                 pthread_create(&bg_thread, NULL, bg_loop, NULL);

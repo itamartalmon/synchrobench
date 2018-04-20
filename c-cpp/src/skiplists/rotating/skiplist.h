@@ -48,7 +48,7 @@ node_t* marker_new(node_t *prev, node_t *next, ptst_t *ptst);
 void node_delete(node_t *node, ptst_t *ptst);
 void marker_delete(node_t *node, ptst_t *ptst);
 
-void set_new(int start, set_t **sets);
+void set_new(int start, set_t **sets, int half_nb_threads);
 void set_delete(set_t *set);
 void set_print(set_t *set, int flag);
 int set_size(set_t *set, int flag);
