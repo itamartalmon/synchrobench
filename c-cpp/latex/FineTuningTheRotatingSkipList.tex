@@ -90,7 +90,8 @@ We examined and extended the following heuristics:
 	\item Level Hight Heuristics
 	\item Level Delete Heuristics 
 	\item Deletion Help Heuristics
-	\item Background Thread Sleeping Heuristics 
+	\item Background Thread Sleeping Heuristics
+	\item MultiSkipList
 \end{itemize}
 
 \hfill \break
@@ -148,7 +149,7 @@ Since it does not directly relate to the balance properties of the structure - t
 \subsubsection{Evaluation}
 \label{sssec:tds-evl}
 
-As can be seen on figure 2, 
+As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thresholds of different orders of magnitude does not improves or compromises the rotating skip list performance under the benchmarked test conditions (which are broader that what was tested in \cite{C1}). This could be a result of the quite extreme condition posed by this heuristic - even for a value of $1/2$ - we so rarely delete more than third of the number of elements in the list while the background thread finishes a single loop. The above makes the effect of this feature on the complexity practicaly negligible. 
 
 \begin{figure}
 	\caption{Tall Delelted By Size Deletion Performence}
@@ -159,19 +160,12 @@ As can be seen on figure 2,
 \subsection{Relative Level Size}
 \label{ssec:rls}
 
-Dynamic Max level is more blablblal
+The motivation of using the ratio between the first and bottom level came from the clear insight that it is a quality of the rotating skip list that is both easy to obtain (while the backround thread traverse the bottom layer it can just check the nodes level in $O(1)$ time) and a good estimate for the imbalance of the structure. As we expect the first level to be around half the size of the bottom level with thougth that a good threshold for deleting would be $3/4$ as it is half the way between the worst situation, where both level are in similar sizes and the optimal $1/2$ value. We also added a $2/3$ threshold implemtation for the testing in order to better understnad the significance of this feature. We benchmarked the level ratios thresholds of $2/3$ and $3/4$ against the original (tall-deletion ratio threshold) for 10 runs, 10 seconds each, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 20 (and 50) percent.
 
 \subsubsection{Evaluation}
 \label{sssec:rls-evl}
 
-As can be seen on figure BLABLALB, ads
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
+As can be seen on figure 3, the performence of both of the level ratio delete heuristic ratio was completely similar to the original tall-deletion heuristic implementation. This was surprising due to the fact that the $2/3$ results in much larger number of first level deletions compare to the $3/4$ threshold and the original heuristic (that might even had no first level deletions). We are not sure if this is due to the testing conditions (we tested similirly to \cite{C1} and more) or if it is the case that deleting the first level more frequently have almost no effect on the performence of the structure.
 
 \begin{figure}
 	\caption{Levels Ratio Deletion Performence}
@@ -227,6 +221,27 @@ As can be seen on figure BLABLALB, ads
 	\includegraphics[width=0.4\textwidth]{sleep_plot}
 \end{figure}
 
+
+\section{Multiple Skip Lists}
+\label{sec:msl}
+
+The idea of randomize load balancing using multiple choises has been popularized in the Mitzenmacher's seminal theasis work\cite{C5}. blablabae , BLABLABLA
+
+\subsection{32 Skip List}
+\label{ssec:dsrs}
+
+In the original paper use, blablblal
+
+\subsubsection{Evaluation}
+\label{sssec:dsrs-evl}
+
+As can be seen on figure BLABLALB, ads
+
+\begin{figure}
+	\caption{Multi Skip List Performence}
+	\centering
+	\includegraphics[width=0.4\textwidth]{many_skiplists_plot}
+\end{figure}
 
 \section{Experimental Settings}
 \label{sec:exp}

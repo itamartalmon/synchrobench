@@ -24,4 +24,10 @@ Gramoli~Vincent Crain, Tyler and Michel Raynal,
 \newblock in {\em Distributed Computing Systems (ICDCS)}, 2013, vol.~33, pp.
   196--205.
 
+\bibitem{C5}
+Michael Mitzenmacher,
+\newblock ``The power of two choices in randomized load balancing.,''
+\newblock in {\em Transactions on Parallel and Distributed Systems}, 2001, vol.
+  12.10, pp. 1094--1104.
+
 \end{thebibliography}
