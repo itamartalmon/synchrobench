@@ -1,13 +1,13 @@
 #!/usr/bin/python
 import os, re, subprocess, pickle, time
 from math import ceil
-ITER_NUM = 10
+ITER_NUM = 12
 SKIP_LISTS_PATH = os.sep.join(['bin'])
 RESULTS_PATH = os.sep.join(['results.pkl'])
 NUM_OF_THREADS = [2, 4, 8, 16, 32, 64]
-INIT_SIZE = [256, 1024]
-UPDATE_RATIO = [20, 50]
-DURATION = 10000
+INIT_SIZE = [256, 2048]
+UPDATE_RATIO = [30, 60]
+DURATION = 12000
 
 TXS_REGEX = "#txs\s+:\s+(\d+)"
 NODES_REGEX = "inodes at level (\d+)\s+=\s+(\d+)"

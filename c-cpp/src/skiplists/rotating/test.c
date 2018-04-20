@@ -729,7 +729,6 @@ int main(int argc, char **argv)
 
         bg_stop();
         bg_print_stats();
-
         //sl_set_print(set, 1);
         set_print_nodenums(set, 0);
         gc_subsystem_destroy();
@@ -746,7 +745,7 @@ int main(int argc, char **argv)
 
 	free(threads);
 	free(data);
-
+	bg_print_based_defines();
 	return 0;
 }
 

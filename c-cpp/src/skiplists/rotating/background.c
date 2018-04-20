@@ -539,6 +539,28 @@ void bg_print_stats(void)
         #endif
 }
 
+void bg_print_based_defines(void)
+{
+	#ifdef LEVEL_RATE_DELETE
+	printf("LEVEL_RATE_DELETE is defined\n");
+	#endif
+	#ifdef CONST_THRESHOLD_LEVEL_DELETE
+	printf("CONST_THRESHOLD_LEVEL_DELETE is defined\n");
+	#endif	
+	#ifdef 	DYNAMIC_MAX_LEVEL
+	printf("DYNAMIC_MAX_LEVEL is defined\n");
+	#endif
+	#ifdef OTHER_THREADS_HELP
+	printf("OTHER_THREADS_HELP is defined\n");
+	#endif
+	#ifdef SLEEP_BY_NUM_OF_THREADS
+	printf("SLEEP_BY_NUM_OF_THREADS is defined\n");
+	#endif	
+	#ifdef SLEEP_ZERO
+	printf("SLEEP_ZERO is defined\n");
+	#endif
+}
+
 /**
  * bg_help_remove - finish physically removing a node
  * @prev: the node before the one to remove
