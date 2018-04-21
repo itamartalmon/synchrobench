@@ -240,7 +240,7 @@ As can be seen on figure BLABLALB, ads
 \begin{figure}
 	\caption{Multi Skip List Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{many_skiplists_plot}
+	\includegraphics[width=0.4\textwidth]{many-skiplists_plot}
 \end{figure}
 
 \section{Experimental Settings}
@@ -251,7 +251,15 @@ We used multicore machine with 8 AMD x86\_64 Opteron(tm) Processor 6376 each hav
 \section{Future Research}
 \label{sec:foot}
 
-BLIA BALIDSA ADBLADS
+\subsubsection{Multiple Background Threads}
+\label{sssec:fr-1}
+The amount of maintnance work the background thread need to do is increasing with the size of the list and the number of worker threads and might lead to imbalaced structure in case too much maintnance need to be done. An obvious solution is to incorporate the multiple lists idea with the background thread idea and have few background threads that work on seperate lists and share the work load. This solution keeps the correctness and simplicty of the rotating skip list and will probabily increase performance in cases where a single background thread is over loaded. Perheps the best solution is having worker threads safely 'change into' maintnance threads according to some heuristic. In more general way, it could be interesting designing algorithms that have a dynamic pool of different threads that perform separate tasks in a way that reduces contention.
+
+\subsubsection{Fine Tuning Probabilistic Skip Lists}
+\label{sssec:fr-2}
+
+In this work, we focused only on extending the rotating skip list design but some of the above extensions could be used (with hopefully stronger effects) on probabilistic skip lists implementations. E.g. in a short testing we performed, it seems that the fraser skip list (also used in the JDK) tend to have unnecessary higher levels due to its probabilistic nature and it would be interesting to see how maximum level solutions will effect its performance.
+
 
 
 % To start a new column (but not a new page) and help balance the last-page

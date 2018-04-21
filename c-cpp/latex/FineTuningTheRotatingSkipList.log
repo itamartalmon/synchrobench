@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  20 APR 2018 18:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  21 APR 2018 14:10
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -273,25 +273,27 @@ File: images/sleep_plot.png Graphic file (type png)
 Package pdftex.def Info: images/sleep_plot.png used on input line 221.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/many_skiplists_plot.png, id=37, 433.62pt x 433.62pt>
-File: images/many_skiplists_plot.png Graphic file (type png)
+<images/many-skiplists_plot.png, id=37, 433.62pt x 433.62pt>
+File: images/many-skiplists_plot.png Graphic file (type png)
 
-<use images/many_skiplists_plot.png>
-Package pdftex.def Info: images/many_skiplists_plot.png used on input line 243.
+<use images/many-skiplists_plot.png>
+Package pdftex.def Info: images/many-skiplists_plot.png used on input line 243.
 
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
- (FineTuningTheRotatingSkipList.bbl)
-[6 <./images/sleep_plot.png> <./images/many_skiplists_plot.png>]
+ (FineTuningTheRotatingSkipList.bbl
+[6 <./images/sleep_plot.png> <./images/many-skiplists_plot.png>]) [7
+
+]
 (FineTuningTheRotatingSkipList.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2280 strings out of 493335
- 30902 string characters out of 3139235
- 101303 words of memory out of 3000000
- 5772 multiletter control sequences out of 15000+200000
+ 2282 strings out of 493335
+ 30926 string characters out of 3139235
+ 101327 words of memory out of 3000000
+ 5774 multiletter control sequences out of 15000+200000
  17809 words of font info for 42 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,7n,23p,3470b,247s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -305,9 +307,9 @@ sfonts/cm/cmsy5.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
 Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><D:/Program Files/MiK
 TeX 2.9/fonts/type1/urw/times/utmr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (6 pages, 411026 bytes).
+Output written on FineTuningTheRotatingSkipList.pdf (7 pages, 396772 bytes).
 PDF statistics:
- 75 PDF objects out of 1000 (max. 8388607)
+ 80 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
