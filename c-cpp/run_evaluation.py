@@ -53,7 +53,7 @@ def main():
                     total_txs = 0
                     nodes = {}
                     for _ in range(ITER_NUM):
-                        p = subprocess.Popen(['timeout', str(2*(DURATION/1000))] + cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                        p = subprocess.Popen(['timeout', str(3*(DURATION/1000))] + cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                         out, err = p.communicate()
                         if p.returncode:
                             print("FAILED TO RUN: {0} will skip to the next list".format(cmd))
