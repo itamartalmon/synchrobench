@@ -55,7 +55,7 @@ Key-value stores offer the basis for indexes to speed up access to data sets. Th
 \subsubsection{Structure Memory}
 \label{ssec:sm}
 
-Locality is achieved by using a rotating array sub-structure, called the wheel, detailed later in a separate section. The structure is a skip list, denoted $sl$, specified with a set of nodes, including two sentinel nodes. The head node is used as an entry point for all accesses to the data structure, it stores a dummy key that is the lowest of all possible keys. A tail node is used to indicate the end of the data structure, its dummy key is strictly larger than any other possible keys. As in other skip lists, node values are ordered in increasing key order from left to right. The global counter ZERO indicates the index of the first level in the wheels, it is set to 0 intially. The node structure contains multiple fields. It first contains a key-value pair denoted by $<k, v>$. Two special values $v = \bot$ and $v = node$ indicate that the node is logically deleted and physically deleted, respectively. A node is first logically deleted before being physically removed and two logically deleted nodes cannot share the same key $k$. The level represents the level of this node’s wheel, similar to the level of the corresponding tower in a traditional skip list, it indicates that the node keeps track of successors indexed from 0 to level − 1. The succs is the node’s wheel, it stores the successor pointer at each level of the node. next (resp. prev) is a direct pointer to the next (resp. previous) node that contains the smallest key larger than $k$ (resp. the highest key lower than $k$). Hence the skip list nodes are all linked through a doubly linked list. This doubly linked list allows to backtrack among preceding nodes if the traversal ends up at a deleted node. Finally, the marker is a special mark used only during physical removal. 
+Locality is achieved by using a rotating array sub-structure, called the wheel, detailed later in a separate section. The structure is a skip list, denoted $sl$, specified with a set of nodes, including two sentinel nodes. The head node is used as an entry point for all accesses to the data structure, it stores a dummy key that is the lowest of all possible keys. A tail node is used to indicate the end of the data structure, its dummy key is strictly larger than any other possible keys. As in other skip lists, node values are ordered in increasing key order from left to right. The global counter ZERO indicates the index of the first level in the wheels, it is set to 0 intially. The node structure contains multiple fields. It first contains a key-value pair denoted by $<k, v>$. Two special values $v = \bot$ and $v = node$ indicate that the node is logically deleted and physically deleted, respectively. A node is first logically deleted before being physically removed and two logically deleted nodes cannot share the same key $k$. The $level$ represents the height of this node’s wheel, similar to the level of the corresponding tower in a traditional skip list, it indicates that the node keeps track of successors indexed from 0 to level − 1. The $succs$ is the node’s wheel, it stores the successor pointer at each level of the node. $next$ (resp. $prev$) is a direct pointer to the next (resp. previous) node that contains the smallest key larger than $k$ (resp. the highest key lower than $k$). Hence the skip list nodes are all linked through a doubly linked list. This doubly linked list allows to backtrack among preceding nodes if the traversal ends up at a deleted node. Finally, the marker is a special mark used only during physical removal. 
 
 \subsubsection{Traversal}
 \label{ssec:trv}
@@ -84,7 +84,7 @@ The memory reclamation of our rotating skip list is based on an epoch based garb
 We examined and extended the following heuristics:
 
 \begin{itemize}
-	\item Level Hight Heuristics
+	\item Level Height Heuristics
 	\item Level Delete Heuristics 
 	\item Deletion Help Heuristics
 	\item Background Thread Sleeping Heuristics
@@ -92,16 +92,16 @@ We examined and extended the following heuristics:
 \end{itemize}
 
 \hfill \break
-Detailed descriptions of the changes made, in addition to the evaluations, are included in the prociding sections of the paper.
+Detailed descriptions of the changes made, in addition to the evaluations, are included in the following sections of the paper.
 
 \subsection{Code Location}
 \label{ssec:cl}
-The complete code, including the compiled data strucures and the evaluation script, could be find at \texttt{github.com/itamartalmon/synchrobench}.\\\\\textbf{Note: the code for the Multiple Skip List implementation in located at the \texttt{br\_ts} branch, all the other impementations are located at the \texttt{master} branch}.\\\\ The code changes are located at \texttt{synchrobench/c-cpp/src/skiplists/rotating}, the evaluations and plots scripts at  \texttt{synchrobench/c-cpp} and the compiled binaries at \texttt{synchrobench/c-cpp/bin}
+The complete code, including the compiled data strucures and the evaluation script, could be find at \texttt{github.com/itamartalmon/synchrobench}.\\\\\textbf{Note: the code for the Multiple Skip List implementation is located at the \texttt{br\_ts} branch, all the other impementations are located at the \texttt{master} branch}.\\\\ The code changes are located at \texttt{synchrobench/c-cpp/src/skiplists/rotating}, the evaluations and plots scripts at  \texttt{synchrobench/c-cpp} and the compiled binaries at \texttt{synchrobench/c-cpp/bin}
 
-\section{LEVEL HIGHT HEURISTICS}
+\section{LEVEL HEIGHT HEURISTICS}
 \label{sec:lhh}
 
-The skip list maximum level hight is considered to be an important factor to its performence. The reasons for that are three fold:
+The skip list maximum level height is considered to be an important factor to its performance. The reasons for that are three fold:
 
 \begin{itemize}
 	\item  A maximum level lower than $\log{N}$, where $N$ is the number of elements in the list, will inevitably hurt the balance properties of the structure and will add to the traversal length
@@ -109,22 +109,22 @@ The skip list maximum level hight is considered to be an important factor to its
 	\item Due to its random properties, it is possible (and in fact plausible, in some implementataion) to have unnecessary high levels that will add some overhead work for each traversal
 \end{itemize}
 
-In all the implementations we incountered the maximum level of the skip list is bound by some constant (usually the word size of the keys, \textbf{in the case of the rotating skip list - 20}). We examined the effects of choosing the that property in fixed and dynamic ways.
+In all the implementations we incountered the maximum level of the skip list is bound by some constant (usually the word size of the keys, \textbf{in the case of the rotating skip list - 20}). We examined the effects of choosing that property in fixed and dynamic ways.
 
 \subsection{Fixed Max Level}
 \label{ssec:fml}
 
-Fixing the Max level to a constant is the simplest way to set it. It is a sensible solution where we know the expected size of our structure and expect it to be relativly stable. We wanted to verify that using large max-size hurts performence and benchmarked the original rotating skip list value of 20, against hardcoded value of 40. We tested each implementation for 10 runs, 10 seconds each, with initial size of 524288, key range of 1048576 and update-operations rate (delete / insert) of 20 and 50 percent. \textbf{Note: we also banchmarked using smaller key ranges that did not resulted in any notable difference so their plots were ommited}.
+Fixing the Max level to a constant is the simplest way to set it. It is a sensible solution where we know the expected size of our structure and expect it to be relativly stable. We wanted to verify that using large max-size hurts performance and benchmarked the original rotating skip list value of 20, against hardcoded value of 40. We tested each implementation for 10 runs, 10 seconds each, with initial size of 524288, key range of 1048576 and update-operations rate (delete / insert) of 20 and 50 percent. \textbf{Note: we also banchmarked using smaller key ranges that did not resulted in any notable difference so their plots were ommited}.
 
 \subsection{Dynamic Max Level}
 \label{ssec:dml}
 
-Dynamic Max level is a more sensible solution in cases where we do not know the expected size of the list or that it may changed drastically over time. In our implementation we decided to add a dynamic parameter that stop the list from growing above a certain hight. This parameter is set to be $\log{N}$ in the end of each of the background loop run, where $N$ is the number of non-deleted elements encountered by the background thread. We benchmarked our implementation against the original rotating skip list implementation with the same test properties as above.
+Dynamic Max level is a more sensible solution in cases where we do not know the expected size of the list or that it may changed drastically over time. In our implementation we decided to add a dynamic parameter that stops the list from growing above a certain height. This parameter is set to be $\log{N}$ in the end of each of the background loop run, where $N$ is the number of non-deleted elements encountered by the background thread. We benchmarked our implementation against the original rotating skip list implementation with the same test properties as above.
 
 \subsubsection{Evaluation}
 \label{sssec:ml-evl}
 
-As can be seen on figure 1, the implementation with the hardcoded max level of 40 perfomed worse compare to both the original 20 and the dynamic max-level implementation. Therefore, it seems, that using unnecessary high-max level hurts performence even when raises are deterministic. This could be a result of imbalance caused by the deletes. This seems even more sensible when examining the results of the dynamic max-level compared to the original - in the low update level scenario, the balance of the structure is relativly stable and the overhead of having dynamic max level hurts the performance but in the high updates scenario, the imbalance is higher and hurts the performence more than the dynamic max-level overhead.
+As can be seen on figure 1, the implementation with the hardcoded max level of 40 perfomed worse compare to both the original 20 and the dynamic max-level implementation. Therefore, it seems, that using unnecessary high-max level hurts performance even when raises are deterministic. This could be a result of imbalance caused by the deletes. This seems even more sensible when examining the results of the dynamic max-level compared to the original - in the low update level scenario, the balance of the structure is relativly stable and the overhead of having dynamic max level hurts the performance but in the high updates scenario, the imbalance is higher and hurts the performance more than the dynamic max-level overhead.
 
 \begin{figure}
 	\caption{Max Level Heuristics Performence}
@@ -136,7 +136,7 @@ As can be seen on figure 1, the implementation with the hardcoded max level of 4
 \section{ROTAION DELETION HEURISTICS}
 \label{sec:rdh}
 
-One of the main features of the rotating skip list is the rotation level delete - which efficiantly deletes the first index level at once by increasing the level modulu parameter. The motivation was to balance the effect of deletions on the structure balance (in the rotating skip list - raising nodes indexes cannot cause imbalance due to its deterministic implementation). In the original imlementation, the heuristic used to initiate this action is when the background thread incounter more than 10 times deleted high level nodes (reffered to as tall-deletions) than the number of non-deleted nodes in a single maintenance loop. The authers stated that it might be interesting to investigate different and more dynamic heuristics. We examined the effects of setting different tal-deletion rate constants and implemented our own heurictic (which is based on the size rate between the bottom and the first level and will be described later with more details).
+One of the main features of the rotating skip list is the rotation level delete - which efficiantly deletes the first index level at once by increasing the level modulo parameter. The motivation was to balance the effect of deletions on the structure balance (in the rotating skip list - raising nodes indexes cannot cause imbalance due to its deterministic implementation). In the original imlementation, the heuristic used to initiate this action is when the background thread incounter more than 10 times deleted high level nodes (reffered to as tall-deletions) than the number of non-deleted bottom level nodes. The authers stated that it might be interesting to investigate different and more dynamic heuristics. We examined the effects of setting different tall-deletion rate constants and implemented our own heurictic (which is based on the size rate between the bottom and the first level (non-deleted nodes only) and will be described later with more details).
 
 \subsection{Tall-Deletions-Size Rate}
 \label{ssec:tds}
@@ -146,7 +146,7 @@ Since it does not directly relate to the balance properties of the structure - t
 \subsubsection{Evaluation}
 \label{sssec:tds-evl}
 
-As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thresholds of different orders of magnitude does not improves or compromises the rotating skip list performance under the benchmarked test conditions (which are broader that what was tested in \cite{C1}). This could be a result of the quite extreme condition posed by this heuristic - even for a value of $1/2$ - we so rarely delete more than third of the number of elements in the list and when we do delete, we usualy hurt the performence - as seen for the $1/2$ threshold runs. This suggests that keeping certain, and even relativly large, number of logicaly deleted nodes helps the skip list performance (compared to the situation where those are deleted and others raise for rebealacing). The above makes the effect of this feature on the complexity practicaly negligible.
+As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thresholds of different orders of magnitude does not improves or compromises the rotating skip list performance under the benchmarked test conditions (which are broader that what was tested in \cite{C1}). This could be a result of the quite extreme condition posed by this heuristic - even for a value of $1/2$ - we so rarely delete more than third of the number of elements in the list and when we do delete, we usualy hurt the performance - as seen for the $1/2$ threshold runs. This suggests that keeping certain, and even relativly large, number of logicaly deleted nodes helps the skip list performance (compared to the situation where those are deleted and others raise for rebealacing). The above makes the effect of this feature on the complexity practicaly negligible.
 
 \begin{figure}
 	\caption{Tall Delelted By Size Deletion Performence}
@@ -157,12 +157,12 @@ As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thre
 \subsection{Relative Level Size}
 \label{ssec:rls}
 
-The motivation of using the ratio between the first and bottom level came from the clear insight that it is a quality of the rotating skip list that is both easy to obtain (while the backround thread traverse the bottom layer it can just check the nodes level in $O(1)$ time) and a good estimate for the imbalance of the structure. As we expect the first level to be around half the size of the bottom level with thougth that a good threshold for deleting would be $3/4$ as it is half the way between the worst situation, where both level are in similar sizes and the optimal $1/2$ value. We also added a $7/8$ threshold implemtation for the testing in order to better understnad the significance of this feature. We benchmarked the level ratios thresholds of $7/8$ and $3/4$ against the original (tall-deletion ratio threshold) for 10 runs, 10 seconds each, with initial size of 524288, key range of 1048576 and update operations rate (delete / insert) of 20 and 50 percent. As before, we omitted the plots of other test conditions that resulted in similar results. 
+The motivation of using the ratio between the first and bottom level came from the clear insight that it is a quality of the rotating skip list that is both easy to obtain (while the backround thread traverse the bottom layer it can just check the nodes level in $O(1)$ time) and a good estimate for the imbalance of the structure. As we expect the first level to be around half the size of the bottom level with thougth that a good threshold for deleting would be $3/4$ as it is half the way between the worst situation, where both level are in similar sizes and the optimal $1/2$ value. We also added a $7/8$ threshold implemtation since the original heuristic suggeted that the lowering of a whole level should rarely happen. We benchmarked the level ratios thresholds of $7/8$ and $3/4$ against the original (tall-deletion ratio threshold) for 10 runs, 10 seconds each, with initial size of 524288, key range of 1048576 and update operations rate (delete / insert) of 20 and 50 percent. As before, we omitted the plots of other test conditions that resulted in similar results. 
 
 \subsubsection{Evaluation}
 \label{sssec:rls-evl}
 
-As can be seen on figure 3, the performence of the level ratio delete heuristic was depended on the update-rate test condition. In the low update-rate tests, the original shows the better performance than the level-ratio heuristic implementations. In contrast, in the high update-rate the level-delete heuristic seems to behave better. It is worth to notice that the $3/4$ ratio seems to strike better balance than the $7/*8$. This suggests that the level-ratio heuristic is better estimation of the structure imbalance but it should only be used on a very dynamic situations.
+As can be seen on figure 3, the performance of the level ratio delete heuristic was depended on the update-rate test condition. In the low update-rate tests, the original shows the better performance than the level-ratio heuristic implementations. In contrast, in the high update-rate the level-delete heuristic seems to behave better. It is worth to notice that the $3/4$ ratio seems to strike better balance than the $7/8$. This suggests that the level-ratio heuristic is better estimation of the structure imbalance but it should only be used on a very dynamic situations.
 
 \begin{figure}
 	\caption{Levels Ratio Deletion Performence}
@@ -179,13 +179,13 @@ In the rotating skip list implementation we first mark a node as logically delet
 \subsection{Thread-Num-Size Rate}
 \label{ssec:tns}
 
-In the original implementation, there is a heuristic that helps deciding whether the delete should help removing. This happens only when the ratio of logically deleted nodes over non-logically deleted nodes (as communicated by the background thread) reaches 3 after what it pays off. We thought that the decision to whether help remove or not should also be taken according to the number of threads. As the number of the threads is bigger the background has much more work to do in order to balance the skip-list structure and maintain the index index levels so help-remove sounds like a good idea. On the other hand, if the number of threads is small, we would rather that there will be more operations happening (add, remove, contains) and the background thread will handle the deletions by itself.
+In the original implementation, there is a heuristic that helps deciding whether the delete should help removing. This happens only when the ratio of logically deleted nodes over non-logically deleted nodes (as communicated by the background thread) reaches 3 after what it pays off. We thought that the decision to whether help remove or not should also be based on the number of threads. As the number of the threads is bigger the background thread has much more work to do in order to balance the skip-list structure and maintain the index index levels so help-remove sounds like a good idea. On the other hand, if the number of threads is small, we would rather that there will be more operations happening (add, remove, contains) and the background thread will handle the deletions by itself.
 We benchmarked the original heuristic agains ours, (where we take the log of number of threads in consideration when deciding whether the delete should help remove), with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 70 (and 90) percent. 
 
 \subsubsection{Evaluation}
 \label{sssec:tns-evl}
 
-As We can be seen on figure 4, there are really minor changes between the two heuristics, it seems that as long as the update rate gets higher the performance of our new heuristic that takes in count the number of threads is a bit better than the original, probably because there are more add/delete operations so in case of many threads that are doing many changing list operations (add/remove) it's more critical to enable the help-removing, but anyway, it's not look like something that have significant improvement.
+As can be seen on figure 4, there are really minor changes between the two heuristics, it seems that as long as the update rate gets higher the performance of our new heuristic that takes in count the number of threads is a bit better than the original, probably because there are more add/delete operations so in case of many threads that are doing many changing list operations (add/remove) it's more critical to enable the help-removing, but anyway, it's not look like something that have significant improvement.
 
 \begin{figure}
 	\caption{Help-Remove Performence}
@@ -203,25 +203,25 @@ The background thread executes a continous loop (until bg\_stop() is called) to 
 	\item remove an entire bottom level of the skip list according to some heuristic
 \end{itemize}
 \\
-The background thread also sleeps for 50 microseconds (a heuristic that is used in the original implementation). We thought it could be interesting to test different heuristics related to sleeping time of the background thread.
+The background thread also sleeps for 50 microseconds (a heuristic that is used in the original implementation). We thought it could be interesting to test different heuristics related to the sleeping time of the background thread.
 
 
 \subsection{Thread-Num Rate}
 \label{ssec:dsrs1}
 
-Instead of sleep for a constant time (50 microseconds) we thought that the time to sleep should be set according to the number of threads. The reason behind is that as long as we have more threads, there are more operation that is happening, changing the skip list structure, which means, that in order to get good performance we must rebalance the skip-list structure as soon as possible, that's why we decided to decrease the time the background thread sleep (in proportion to the original sleeping time) when the number of thread increases. So when we have a small number of thread, we have less work so the background thread can sleep some more.
+Instead of sleeping for a constant time (50 microseconds) we thought that the time to sleep should be set according to the number of threads. The reason behind is that as long as we have more threads, there are more operation that is happening, changing the skip list structure, which means, that in order to get good performance we must rebalance the skip-list structure as soon as possible, that's why we decided to decrease the time the background thread sleep (in proportion to the original sleeping time) when the number of thread increases. So when we have a small number of thread, we have less work so the background thread can sleep some more.
 
 \subsection{Sleep double time, Don't sleep at all}
 \label{ssec:sdt}
 
 A different heuristic we thought is to make the background thread sleep for double time - 100 ms instead of 50 ms and then canceling the sleep time of the background thread so it won't sleep at all in every second iteration.
-We wanted to test if the fact that sometimes the background thread doesn't sleep at all make it better because the skip-list structure should be more balanced.
+We wanted to test if the fact that sometimes the background thread doesn't sleep at all make it better because the skip-list structure should be more balanced this way.
 We benchmarked the original sleep time against the heuristics described in sections 5.1 and 5.2, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 20 (and 50) percent. 
 
 \subsubsection{Evaluation}
 \label{sssec:dsrs-evl1}
 
-Evaluation As we can be seen on figure 5, the performance of both of our new heuristics was similar to the one of the original heuristic. Our new heuristics always performed better but it seems to be minor changes. We tested it with different parameters and we got to the conclusion that the sleeping time of the background thread as long as it's not too extreme doesn't affect the performance significantly.
+ As can be seen on figure 5, the performance of both of our new heuristics was similar to the one of the original heuristic. Our new heuristics always performed better but it seems to be minor changes. We tested it with different parameters and we got to the conclusion that the sleeping time of the background thread as long as it's not too extreme doesn't effect the performance significantly.
 
 \begin{figure}
 	\caption{Background Sleep Time Performence}
@@ -241,7 +241,7 @@ We thought to go with the same direction, diminish contention, so we decided to 
 \subsection{Dynamic Number of Skip List}
 \label{ssec:dsrs}
 
-We decided that the number of skip lists will be depend on the number of threads because more threads means more contention so our heuristic is to take the number of the skip lists to be half of the number of threads.
+We decided that the number of skip lists will be depended on the number of threads because more threads means more contention, so our heuristic is to take the number of the skip lists to be half of the number of threads.
 We benchmarked the original sleep time against the the multiple skip lists heuristic, with initial size of 128, key range of 256 and update operations rate (delete / insert) of 30 (and 60) percent. 
 
 \subsubsection{Evaluation}
