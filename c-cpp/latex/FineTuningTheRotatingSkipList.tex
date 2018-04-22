@@ -3,7 +3,7 @@
 %          IEEEbib.bst - IEEE bibliography style file.
 % --------------------------------------------------------------------------
 \documentclass{article}
-\usepackage{spconf,amsmath,graphicx}
+\usepackage{amsmath,graphicx}
 
 \graphicspath{ {images/} }
 
@@ -14,12 +14,9 @@
 
 % Title.
 % ------
-\title{Fine Tuning The Rotating Skip List}
-%
-% Single address.
-% ---------------
-\name{Itamar Talmon, Tal Shoef}
-\address{Tel Aviv University}
+\title{Fine Tuning The Rotating Skip List\\Itamar Talmon, Tal Shoef\\
+Tel Aviv University}
+
 
 \begin{document}
 %\ninept
@@ -99,7 +96,7 @@ Detailed descriptions of the changes made, in addition to the evaluations, are i
 
 \subsection{Code Location}
 \label{ssec:cl}
-The complete code, including the compiled data strucures and the evaluation script, could be find at \\\texttt{github.com/itamartalmon/synchrobench}.
+The complete code, including the compiled data strucures and the evaluation script, could be find at \\\texttt{github.com/itamartalmon/synchrobench}.\\\textbf{Note: the code for the Multiple Skip List implementation in located at the \texttt{br\_ts} branch, all the other impementations are located at the \texttt{master} branch}
 
 \section{LEVEL HIGHT HEURISTICS}
 \label{sec:lhh}
@@ -132,7 +129,7 @@ As can be seen on figure 1, fixing the maximum level to be lower or higher than 
 \begin{figure}
 	\caption{Max Level Heuristics Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{max-level_plot}
+	\includegraphics[width=0.6\textwidth]{max-level_plot}
 \end{figure}
 
 
@@ -154,7 +151,7 @@ As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thre
 \begin{figure}
 	\caption{Tall Delelted By Size Deletion Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{level-delete-original_plot}
+	\includegraphics[width=0.6\textwidth]{level-delete-original_plot}
 \end{figure}
 
 \subsection{Relative Level Size}
@@ -170,7 +167,7 @@ As can be seen on figure 3, the performence of both of the level ratio delete he
 \begin{figure}
 	\caption{Levels Ratio Deletion Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{level-delete-by-ratio_plot}
+	\includegraphics[width=0.6\textwidth]{level-delete-by-ratio_plot}
 \end{figure}
 
 
@@ -197,7 +194,7 @@ bla bla bla bla bla bla
 \begin{figure}
 	\caption{Help-Remove Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{help-remove_plot}
+	\includegraphics[width=0.6\textwidth]{help-remove_plot}
 \end{figure}
 
 \section{BACKGROUND THREAD SLEEP HEURISTICS}
@@ -218,7 +215,7 @@ As can be seen on figure BLABLALB, ads
 \begin{figure}
 	\caption{Background Sleep Time Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{sleep_plot}
+	\includegraphics[width=0.6\textwidth]{sleep_plot}
 \end{figure}
 
 
@@ -240,7 +237,7 @@ As can be seen on figure BLABLALB, ads
 \begin{figure}
 	\caption{Multi Skip List Performence}
 	\centering
-	\includegraphics[width=0.4\textwidth]{many-skiplists_plot}
+	\includegraphics[width=0.6\textwidth]{many-skiplists_plot}
 \end{figure}
 
 \section{Experimental Settings}
