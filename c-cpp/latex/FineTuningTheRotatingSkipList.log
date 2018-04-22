@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 18:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 20:26
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -111,17 +111,7 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 \Gin@req@height=\dimen112
 \Gin@req@width=\dimen113
 )
-(FineTuningTheRotatingSkipList.aux
-
-LaTeX Warning: Label `ssec:dsrs' multiply defined.
-
-
-LaTeX Warning: Label `sssec:dsrs-evl' multiply defined.
-
-
-LaTeX Warning: Label `sssec:fr-1' multiply defined.
-
-)
+(FineTuningTheRotatingSkipList.aux)
 \openout1 = `FineTuningTheRotatingSkipList.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
@@ -136,7 +126,8 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 21.
 LaTeX Font Info:    ... okay on input line 21.
- ("D:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+
+("D:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count100
 \scratchdimen=\dimen114
@@ -246,63 +237,71 @@ File: images/level-delete-by-ratio_plot.png Graphic file (type png)
 Package pdftex.def Info: images/level-delete-by-ratio_plot.png used on input li
 ne 170.
 (pdftex.def)             Requested size: 207.0021pt x 207.00381pt.
- [9 <./images/level-delete-original_plot.png>] <images/help-remove_plot.png, id
-=49, 361.35pt x 361.35pt>
+ [9 <./images/level-delete-original_plot.png>] [10 <./images/level-delete-by-ra
+tio_plot.png>]
+<images/help-remove_plot.png, id=53, 361.35pt x 361.35pt>
 File: images/help-remove_plot.png Graphic file (type png)
 
 <use images/help-remove_plot.png>
-Package pdftex.def Info: images/help-remove_plot.png used on input line 197.
+Package pdftex.def Info: images/help-remove_plot.png used on input line 193.
 (pdftex.def)             Requested size: 207.0021pt x 207.00272pt.
 
-Overfull \hbox (2.02785pt too wide) in paragraph at lines 200--200
-[]\OT1/cmr/bx/n/14.4 BACKGROUND THREAD SLEEP HEURIS-
- []
 
-<images/sleep_plot.png, id=50, 361.35pt x 361.35pt>
+! LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.206 T
+       he background thread also sleeps for 50 microseconds (a heuristic tha...
+
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+[11 <./images/help-remove_plot.png>]
+<images/sleep_plot.png, id=58, 361.35pt x 361.35pt>
 File: images/sleep_plot.png Graphic file (type png)
 
 <use images/sleep_plot.png>
-Package pdftex.def Info: images/sleep_plot.png used on input line 218.
+Package pdftex.def Info: images/sleep_plot.png used on input line 229.
 (pdftex.def)             Requested size: 207.0021pt x 207.00272pt.
- [10 <./images/level-delete-by-ratio_plot.png>]
-[11 <./images/help-remove_plot.png> <./images/sleep_plot.png>]
-<images/many-skiplists_plot.png, id=60, 361.35pt x 361.35pt>
+ [12]
+<images/many-skiplists_plot.png, id=62, 361.35pt x 361.35pt>
 File: images/many-skiplists_plot.png Graphic file (type png)
 
 <use images/many-skiplists_plot.png>
-Package pdftex.def Info: images/many-skiplists_plot.png used on input line 240.
+Package pdftex.def Info: images/many-skiplists_plot.png used on input line 255.
 
 (pdftex.def)             Requested size: 207.0021pt x 207.00272pt.
- [12 <./images/many-skiplists_plot.png>]
-(FineTuningTheRotatingSkipList.bbl) [13] (FineTuningTheRotatingSkipList.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+ [13 <./images/sleep_plot.png>] [14 <./images/many-skiplists_plot.png>] (FineTu
+ningTheRotatingSkipList.bbl) [15]
+(FineTuningTheRotatingSkipList.aux) ) 
 Here is how much of TeX's memory you used:
- 2187 strings out of 493335
- 29668 string characters out of 3139235
- 97034 words of memory out of 3000000
- 5693 multiletter control sequences out of 15000+200000
+ 2191 strings out of 493335
+ 29718 string characters out of 3139235
+ 97043 words of memory out of 3000000
+ 5697 multiletter control sequences out of 15000+200000
  10144 words of font info for 37 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,6n,23p,3470b,235s stack positions out of 5000i,500n,10000p,200000b,50000s
-<D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><D:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><D:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx9.pfb><D:/Program Files/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><D:/Program Files/MiKTeX 2.9/fo
-nts/type1/public/amsfonts/cm/cmmi7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmr10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr12.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmr17.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pf
-b><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><D:/Program Fil
-es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/Program Files/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><D:/Program Files/MiKTeX 2.9/fon
-ts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (13 pages, 442137 bytes).
+<D:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmbx10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmbx12.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
+m/cmbx9.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.
+pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><D:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><D:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><D:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><D:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr9.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/am
+sfonts/cm/cmsy5.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.p
+fb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on FineTuningTheRotatingSkipList.pdf (15 pages, 463954 bytes).
 PDF statistics:
- 114 PDF objects out of 1000 (max. 8388607)
+ 120 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -174,22 +174,18 @@ As can be seen on figure 3, the performence of the level ratio delete heuristic 
 \section{DELETION HELP HEURISTICS}
 \label{sec:dhh}
 
+In the rotating skip list implementation we first mark a node as logically deleted (to minimize contention) before physically remove it from the list. The background thread is the main thread that is responsible for physically remove nodes but other threads can also help him remove nodes. 
+
 \subsection{Thread-Num-Size Rate}
 \label{ssec:tns}
 
-Dynamic Max level is more blablblal
+In the original implementation, there is a heuristic that helps deciding whether the delete should help removing. This happens only when the ratio of logically deleted nodes over non-logically deleted nodes (as communicated by the background thread) reaches 3 after what it pays off. We thought that the decision to whether help remove or not should also be taken according to the number of threads. As the number of the threads is bigger the background has much more work to do in order to balance the skip-list structure and maintain the index index levels so help-remove sounds like a good idea. On the other hand, if the number of threads is small, we would rather that there will be more operations happening (add, remove, contains) and the background thread will handle the deletions by itself.
+We benchmarked the original heuristic agains ours, (where we take the log of number of threads in consideration when deciding whether the delete should help remove), with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 70 (and 90) percent. 
 
 \subsubsection{Evaluation}
 \label{sssec:tns-evl}
 
-As can be seen on figure BLABLALB, ads
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
-bla bla bla bla bla 
-bla bla bla bla bla bla
+As We can be seen on figure 4, there are really minor changes between the two heuristics, it seems that as long as the update rate gets higher the performance of our new heuristic that takes in count the number of threads is a bit better than the original, probably because there are more add/delete operations so in case of many threads that are doing many changing list operations (add/remove) it's more critical to enable the help-removing, but anyway, it's not look like something that have significant improvement.
 
 \begin{figure}
 	\caption{Help-Remove Performence}
@@ -197,20 +193,35 @@ bla bla bla bla bla bla
 	\includegraphics[width=0.6\textwidth]{help-remove_plot}
 \end{figure}
 
-\section{BACKGROUND THREAD SLEEP HEURISTICS}
+\section{BG THREAD SLEEP HEURISTICS}
 \label{sec:bts}
 
-The background blablabae , BLABLABLA
+The background thread executes a continous loop (until bg\_stop() is called) to maintain index levels. In each iteration the background thread:
+\begin{itemize}
+	\item traverses the nodes/indexes and for each level from bottom to top it raises each node in the middle of three consecutive non-deleted nodes of the same height 
+	\item physically delete logically deleted nodes
+	\item remove an entire bottom level of the skip list according to some heuristic
+\end{itemize}
+\\
+The background thread also sleeps for 50 microseconds (a heuristic that is used in the original implementation). We thought it could be interesting to test different heuristics related to sleeping time of the background thread.
+
 
 \subsection{Thread-Num Rate}
-\label{ssec:dsrs}
+\label{ssec:dsrs1}
 
-In the original paper use, blablblal
+Instead of sleep for a constant time (50 microseconds) we thought that the time to sleep should be set according to the number of threads. The reason behind is that as long as we have more threads, there are more operation that is happening, changing the skip list structure, which means, that in order to get good performance we must rebalance the skip-list structure as soon as possible, that's why we decided to decrease the time the background thread sleep (in proportion to the original sleeping time) when the number of thread increases. So when we have a small number of thread, we have less work so the background thread can sleep some more.
+
+\subsection{Sleep double time, Don't sleep at all}
+\label{ssec:sdt}
+
+A different heuristic we thought is to make the background thread sleep for double time - 100 ms instead of 50 ms and then canceling the sleep time of the background thread so it won't sleep at all in every second iteration.
+We wanted to test if the fact that sometimes the background thread doesn't sleep at all make it better because the skip-list structure should be more balanced.
+We benchmarked the original sleep time against the heuristics described in sections 5.1 and 5.2, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 20 (and 50) percent. 
 
 \subsubsection{Evaluation}
-\label{sssec:dsrs-evl}
+\label{sssec:dsrs-evl1}
 
-As can be seen on figure BLABLALB, ads
+Evaluation As we can be seen on figure 5, the performance of both of our new heuristics was similar to the one of the original heuristic. Our new heuristics always performed better but it seems to be minor changes. We tested it with different parameters and we got to the conclusion that the sleeping time of the background thread as long as it's not too extreme doesn't affect the performance significantly.
 
 \begin{figure}
 	\caption{Background Sleep Time Performence}
@@ -222,17 +233,21 @@ As can be seen on figure BLABLALB, ads
 \section{Multiple Skip Lists}
 \label{sec:msl}
 
-The idea of randomize load balancing using multiple choises has been popularized in the Mitzenmacher's seminal theasis work\cite{C5}. blablabae , BLABLABLA
+The original implementation of the rotating skip list uses one background thread and some worker threads that execute operations like add, remove and contains.
+The implementation use only one skiplist that's everybody is working on, along the years the researchers of the skip-list performance tried to diminish contention to get better results.
+We thought to go with the same direction, diminish contention, so we decided to use more than one skiplists (in the lines of \cite{C5}). We know that as long as there are many threads, there is still contention, many threads interfering on the same shared data. 
+
 
 \subsection{Dynamic Number of Skip List}
 \label{ssec:dsrs}
 
-In the original paper use, blablblal
+We decided that the number of skip lists will be depend on the number of threads because more threads means more contention so our heuristic is to take the number of the skip lists to be half of the number of threads.
+We benchmarked the original sleep time against the the multiple skip lists heuristic, with initial size of 128, key range of 256 and update operations rate (delete / insert) of 30 (and 60) percent. 
 
 \subsubsection{Evaluation}
 \label{sssec:dsrs-evl}
 
-As can be seen on figure BLABLALB, ads
+As can be seen on figure 6, the performance of the multiple skip lists was very similar to the original implementation as long as the number of threads is smaller than 16, what matches our thoughts that our heuristic is good for high contention, many threads interfering to each other. Indeed, when the number of threads increases to 32 and especially 64, we can see that our implementation almost twice as good as the original implementation, which is a significant improvement.
 
 \begin{figure}
 	\caption{Multi Skip List Performence}
@@ -249,7 +264,7 @@ We used multicore machine with 8 AMD x86\_64 Opteron(tm) Processor 6376 each hav
 \label{sec:foot}
 
 \subsubsection{Multiple Background Threads}
-\label{sssec:fr-1}
+\label{sssec:mbt}
 The amount of maintnance work the background thread need to do is increasing with the size of the list and the number of worker threads and might lead to imbalaced structure in case too much maintnance need to be done. An obvious solution is to incorporate the multiple lists idea with the background thread idea and have few background threads that work on seperate lists and share the work load. This solution keeps the correctness and simplicty of the rotating skip list and will probabily increase performance in cases where a single background thread is over loaded. Perheps the best solution is having worker threads safely 'change into' maintnance threads according to some heuristic. In more general way, it could be interesting designing algorithms that have a dynamic pool of different threads that perform separate tasks in a way that reduces contention.
 
 \subsubsection{Heurictics Based on Action Distribution}
