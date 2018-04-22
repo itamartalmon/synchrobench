@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 13:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 18:45
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -224,28 +224,28 @@ Missing character: There is no ™ in font cmr10!
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 99.
  [5]
-[6] <images/max-level_plot.png, id=33, 361.35pt x 361.35pt>
+[6] <images/max-level_plot.png, id=33, 433.62pt x 433.62pt>
 File: images/max-level_plot.png Graphic file (type png)
 
 <use images/max-level_plot.png>
 Package pdftex.def Info: images/max-level_plot.png used on input line 132.
-(pdftex.def)             Requested size: 207.0021pt x 207.00272pt.
+(pdftex.def)             Requested size: 207.0021pt x 207.00381pt.
  [7 <./images/max-level_plot.png>]
-<images/level-delete-original_plot.png, id=40, 361.35pt x 361.35pt>
+<images/level-delete-original_plot.png, id=40, 433.62pt x 433.62pt>
 File: images/level-delete-original_plot.png Graphic file (type png)
 
 <use images/level-delete-original_plot.png>
 Package pdftex.def Info: images/level-delete-original_plot.png used on input li
 ne 154.
-(pdftex.def)             Requested size: 207.0021pt x 207.00272pt.
+(pdftex.def)             Requested size: 207.0021pt x 207.00381pt.
  [8]
-<images/level-delete-by-ratio_plot.png, id=44, 361.35pt x 361.35pt>
+<images/level-delete-by-ratio_plot.png, id=44, 433.62pt x 433.62pt>
 File: images/level-delete-by-ratio_plot.png Graphic file (type png)
 
 <use images/level-delete-by-ratio_plot.png>
 Package pdftex.def Info: images/level-delete-by-ratio_plot.png used on input li
 ne 170.
-(pdftex.def)             Requested size: 207.0021pt x 207.00272pt.
+(pdftex.def)             Requested size: 207.0021pt x 207.00381pt.
  [9 <./images/level-delete-original_plot.png>] <images/help-remove_plot.png, id
 =49, 361.35pt x 361.35pt>
 File: images/help-remove_plot.png Graphic file (type png)
@@ -300,7 +300,7 @@ ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy5.pfb><D:/Program Fil
 es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><D:/Program Files/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><D:/Program Files/MiKTeX 2.9/fon
 ts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (13 pages, 459583 bytes).
+Output written on FineTuningTheRotatingSkipList.pdf (13 pages, 442137 bytes).
 PDF statistics:
  114 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
