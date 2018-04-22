@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 20:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 20:35
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -214,8 +214,23 @@ Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 99.
- [5]
-[6] <images/max-level_plot.png, id=33, 433.62pt x 433.62pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 99--100
+
+ []
+
+
+Overfull \hbox (10.60942pt too wide) in paragraph at lines 99--100
+\OT1/cmr/m/n/10 The code changes are lo-cated at \OT1/cmtt/m/n/10 synchrobench/
+c-cpp/src/skiplists/rotating\OT1/cmr/m/n/10 ,
+ []
+
+[5] [6] <images/max-level_plot.png, id=33, 433.62pt x 433.62pt>
 File: images/max-level_plot.png Graphic file (type png)
 
 <use images/max-level_plot.png>
@@ -299,7 +314,7 @@ ublic/amsfonts/cm/cmsy10.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/am
 sfonts/cm/cmsy5.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
 /cmsy7.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.p
 fb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (15 pages, 463954 bytes).
+Output written on FineTuningTheRotatingSkipList.pdf (15 pages, 451142 bytes).
 PDF statistics:
  120 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
