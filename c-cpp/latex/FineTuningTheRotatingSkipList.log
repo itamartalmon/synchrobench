@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  21 APR 2018 14:10
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2017.4.3)  22 APR 2018 12:40
 entering extended mode
 **./FineTuningTheRotatingSkipList.tex
 (FineTuningTheRotatingSkipList.tex
@@ -264,24 +264,25 @@ File: images/help-remove_plot.png Graphic file (type png)
 <use images/help-remove_plot.png>
 Package pdftex.def Info: images/help-remove_plot.png used on input line 200.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
- [5 <./images/level-delete-original_plot.png> <./images/level-delete-by-ratio_p
-lot.png> <./images/help-remove_plot.png>]
-<images/sleep_plot.png, id=36, 433.62pt x 433.62pt>
+
+<images/sleep_plot.png, id=30, 433.62pt x 433.62pt>
 File: images/sleep_plot.png Graphic file (type png)
 
 <use images/sleep_plot.png>
 Package pdftex.def Info: images/sleep_plot.png used on input line 221.
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
 
-<images/many-skiplists_plot.png, id=37, 433.62pt x 433.62pt>
+<images/many-skiplists_plot.png, id=31, 433.62pt x 433.62pt>
 File: images/many-skiplists_plot.png Graphic file (type png)
 
 <use images/many-skiplists_plot.png>
 Package pdftex.def Info: images/many-skiplists_plot.png used on input line 243.
 
 (pdftex.def)             Requested size: 202.58052pt x 202.58398pt.
- (FineTuningTheRotatingSkipList.bbl
-[6 <./images/sleep_plot.png> <./images/many-skiplists_plot.png>]) [7
+ [5 <./images/level-delete-original_plot.png> <./images/level-delete-by-ratio_p
+lot.png>]
+(FineTuningTheRotatingSkipList.bbl [6 <./images/help-remove_plot.png> <./images
+/sleep_plot.png> <./images/many-skiplists_plot.png>]) [7
 
 ]
 (FineTuningTheRotatingSkipList.aux)
@@ -307,7 +308,7 @@ sfonts/cm/cmsy5.pfb><D:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
 Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><D:/Program Files/MiK
 TeX 2.9/fonts/type1/urw/times/utmr8a.pfb><D:/Program Files/MiKTeX 2.9/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on FineTuningTheRotatingSkipList.pdf (7 pages, 396772 bytes).
+Output written on FineTuningTheRotatingSkipList.pdf (7 pages, 383434 bytes).
 PDF statistics:
  80 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)

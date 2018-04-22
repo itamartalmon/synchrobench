@@ -144,12 +144,12 @@ One of the main features of the rotating skip list is the rotation level delete 
 \subsection{Tall-Deletions-Size Rate}
 \label{ssec:tds}
 
-Since it does not directly relate to the balance properties of the structure - the idea of conditioning the first layer deletion with the number of the deleted high level nodes might sound a bit strange at first, but since this is the only way that a balanced rotating skip list can become imbalanced, it is a sensible and practical solution (as the background thread is the only one which deletes tall nodes it can easily count them with almost no work or implementation complexity overhead). We wanted to check the way in which the tall-deletion threshold rate parameter influence the skip list performance. We benchmarked the original threshold value of 10 against values of 5, 1 and $1/2$ for 10 runs, 10 seconds each, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 20 (and 50) percent.
+Since it does not directly relate to the balance properties of the structure - the idea of conditioning the first layer deletion with the number of the deleted high level nodes might sound a bit strange at first, but since this is the only way that a balanced rotating skip list can become imbalanced, it is a sensible and practical solution (as the background thread is the only one which deletes tall nodes it can easily count them with almost no work or implementation complexity overhead). We wanted to check the way in which the tall-deletion threshold rate parameter influence the skip list performance. We benchmarked the original threshold value of 10 against values of 5, 1 and $1/2$ for 10 runs, 10 seconds each, with initial size of 256 (and 65536), key range of 512 (and 131072) and update operations rate (delete / insert) of 30 (and 60) percent. In addition, we condacted more tests (ratios of 20 and 70, sizes of 1024 and 512) that did not yield any results that shown difference between the different thresholds and chose not to include their plots.
 
 \subsubsection{Evaluation}
 \label{sssec:tds-evl}
 
-As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thresholds of different orders of magnitude does not improves or compromises the rotating skip list performance under the benchmarked test conditions (which are broader that what was tested in \cite{C1}). This could be a result of the quite extreme condition posed by this heuristic - even for a value of $1/2$ - we so rarely delete more than third of the number of elements in the list while the background thread finishes a single loop. The above makes the effect of this feature on the complexity practicaly negligible. 
+As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thresholds of different orders of magnitude does not improves or compromises the rotating skip list performance under the benchmarked test conditions (which are broader that what was tested in \cite{C1}). This could be a result of the quite extreme condition posed by this heuristic - even for a value of $1/2$ - we so rarely delete more than third of the number of elements in the list and when we do delete, we usualy hurt the performence. This suggests that keeping certain, and even relativly large, number of logicaly deleted nodes helps the skip list performance (compared to the situation where those are deleted and others raise for rebealacing). The above makes the effect of this feature on the complexity practicaly negligible. 
 
 \begin{figure}
 	\caption{Tall Delelted By Size Deletion Performence}
@@ -160,12 +160,12 @@ As can be seen on figure 2, somewhat surprisingly, using tall-deletion rate thre
 \subsection{Relative Level Size}
 \label{ssec:rls}
 
-The motivation of using the ratio between the first and bottom level came from the clear insight that it is a quality of the rotating skip list that is both easy to obtain (while the backround thread traverse the bottom layer it can just check the nodes level in $O(1)$ time) and a good estimate for the imbalance of the structure. As we expect the first level to be around half the size of the bottom level with thougth that a good threshold for deleting would be $3/4$ as it is half the way between the worst situation, where both level are in similar sizes and the optimal $1/2$ value. We also added a $2/3$ threshold implemtation for the testing in order to better understnad the significance of this feature. We benchmarked the level ratios thresholds of $2/3$ and $3/4$ against the original (tall-deletion ratio threshold) for 10 runs, 10 seconds each, with initial size of 256 (and 1024), key range of 512 (and 2048) and update operations rate (delete / insert) of 20 (and 50) percent.
+The motivation of using the ratio between the first and bottom level came from the clear insight that it is a quality of the rotating skip list that is both easy to obtain (while the backround thread traverse the bottom layer it can just check the nodes level in $O(1)$ time) and a good estimate for the imbalance of the structure. As we expect the first level to be around half the size of the bottom level with thougth that a good threshold for deleting would be $3/4$ as it is half the way between the worst situation, where both level are in similar sizes and the optimal $1/2$ value. We also added a $2/3$ threshold implemtation for the testing in order to better understnad the significance of this feature. We benchmarked the level ratios thresholds of $2/3$ and $3/4$ against the original (tall-deletion ratio threshold) for 10 runs, 10 seconds each, with initial size of 128 (and 262144), key range of 256 (and 524288) and update operations rate (delete / insert) of 30 (and 60) percent.
 
 \subsubsection{Evaluation}
 \label{sssec:rls-evl}
 
-As can be seen on figure 3, the performence of both of the level ratio delete heuristic ratio was completely similar to the original tall-deletion heuristic implementation. This was surprising due to the fact that the $2/3$ results in much larger number of first level deletions compare to the $3/4$ threshold and the original heuristic (that might even had no first level deletions). We are not sure if this is due to the testing conditions (we tested similirly to \cite{C1} and more) or if it is the case that deleting the first level more frequently have almost no effect on the performence of the structure.
+As can be seen on figure 3, the performence of both of the level ratio delete heuristic ratio was completely similar to the original tall-deletion heuristic implementation under conditions with small range of keys and slightly worse when the key range is large. It is interesting to note that in the large key range tests, the more frequently we use first level delete, the worst the performance gets. This supports the claim from the previous section as it seems that as long we do not have very large number of logically deleted nodes, it is better to keep them than to delete and rebalance.
 
 \begin{figure}
 	\caption{Levels Ratio Deletion Performence}
@@ -227,7 +227,7 @@ As can be seen on figure BLABLALB, ads
 
 The idea of randomize load balancing using multiple choises has been popularized in the Mitzenmacher's seminal theasis work\cite{C5}. blablabae , BLABLABLA
 
-\subsection{32 Skip List}
+\subsection{Dynamic Number of Skip List}
 \label{ssec:dsrs}
 
 In the original paper use, blablblal
@@ -260,6 +260,9 @@ The amount of maintnance work the background thread need to do is increasing wit
 
 In this work, we focused only on extending the rotating skip list design but some of the above extensions could be used (with hopefully stronger effects) on probabilistic skip lists implementations. E.g. in a short testing we performed, it seems that the fraser skip list (also used in the JDK) tend to have unnecessary higher levels due to its probabilistic nature and it would be interesting to see how maximum level solutions will effect its performance.
 
+\subsubsection{Heurictics Based on Action Distribution}
+\label{sssec:fr-1}
+In some cases, we noticed that some heuristic work better under different update actions distributions (e.g. 50 \% deletions and inserts). This leads to possible improvment based on keeping some simple approximation of the action distribution inside the skip list itself (e.g. counters for how many inserts/deletes/searchs were performed since the last background loop) and use this estimation to fine tune some thresholds.
 
 
 % To start a new column (but not a new page) and help balance the last-page
